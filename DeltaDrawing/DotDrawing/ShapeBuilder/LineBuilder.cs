@@ -24,7 +24,7 @@ using DeltaDrawing.DotDrawing.Drawings;
 
 namespace DeltaDrawing.DotDrawing.ShapeBuilder
 {
-	public class MouseLineBuilder : BuilderTool
+	public class LineBuilder : BuilderTool
 	{
 		
 		internal enum State
@@ -59,6 +59,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 			
 			if (shape.Points.Count > 0) {
 				shape.Points.RemoveAt(shape.Points.Count - 1);
+				shape.Components.RemoveAt(shape.Components.Count-1);
 				Region invalidatedRegion = new Region(shape.Bounds);
 				dotDrawing.Invalidate(invalidatedRegion);
 			}
@@ -101,8 +102,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 					}
 					else
 						p=e.Location;
-					
-					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 2], p));
+					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 2], shape.Points[shape.Points.Count - 1]));
+					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 1], p));
 					shape.AddPoint(p);
 					Region region = new Region(shape.Bounds);
 					dotDrawing.Invalidate(region);
@@ -135,10 +136,10 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 					int gridSize = dotDrawing.GridSize;
 					Point p = new Point((int)e.Location.X / gridSize * gridSize, (int)e.Location.Y / gridSize * gridSize);
 					shape.Points[shape.Points.Count - 1] = p;
-					//shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 2], p));
+					shape.Components[shape.Components.Count-1].P2 = p;
 				} else {
 					shape.Points[shape.Points.Count - 1] = e.Location;
-					//shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 2], e.Location));
+					shape.Components[shape.Components.Count-1].P2 = e.Location;
 				}
 			
 				dotDrawing.Invalidate(shape.Bounds);
