@@ -31,7 +31,7 @@ namespace DrawingApplication
 		
 		BuilderTool lineBuilder = new LineBuilder();
 		BuilderTool circleBuilder = new CircleBuilder();
-		
+		BuilderTool activeBuilder;
 		public MainForm()
 		{
  
@@ -41,10 +41,7 @@ namespace DrawingApplication
 			circleBuilder.Attach(this.dotDrawing);
 		}
 		
-		void ToolStripButton1Click(object sender, EventArgs e)
-		{
-			lineBuilder.Begin();
-		}
+
 		
 		
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -56,8 +53,7 @@ namespace DrawingApplication
 				switch (keyData) {
 						
 					case Keys.Escape:
-						//dotDrawing.Drawings.Add(lineBuilder.End());
-						lineBuilder.End();
+						activeBuilder.End();
 						break;
 					case Keys.Down:
 						this.Parent.Text = "Down Arrow Captured";
@@ -83,8 +79,15 @@ namespace DrawingApplication
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 		
+		void ToolStripButton1Click(object sender, EventArgs e)
+		{
+			activeBuilder = lineBuilder;
+			lineBuilder.Begin();
+		}
+		
 		void ToolStripButton2Click(object sender, EventArgs e)
 		{
+			activeBuilder = circleBuilder;
 			circleBuilder.Begin();
 		}
 		

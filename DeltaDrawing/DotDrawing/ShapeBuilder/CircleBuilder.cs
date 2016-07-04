@@ -69,6 +69,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 		public PlottedShape End()
 		{
 			Active = false;
+			state = State.NOT_INITIALIZED;
 			return shape;
 		}
 
@@ -98,12 +99,12 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 			}
 		}
 
-		void OnMouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		void OnMouseUp(object sender, MouseEventArgs e)
 		{
 			//throw new NotImplementedException();
 		}
 
-		void MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+		void MouseMove(object sender, MouseEventArgs e)
 		{
 			if (!Active)
 				return;
