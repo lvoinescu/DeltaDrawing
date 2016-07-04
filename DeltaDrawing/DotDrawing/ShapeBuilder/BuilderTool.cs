@@ -29,5 +29,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 	{
 		PlottedShape Begin();
 		PlottedShape End();
+		void Attach(DotDrawing dotDrawing);
+		bool Active {get ;set;}
 	}
 }

@@ -12,7 +12,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using DeltaDrawing.DotDrawing.Drawings;
-using DeltaDrawing.DotDrawing.Geometry;
 
 namespace DeltaDrawing.DotDrawing
 {
@@ -21,7 +20,7 @@ namespace DeltaDrawing.DotDrawing
 	/// </summary>
 	public partial class DotDrawing : UserControl
 	{
-		const int HOVER_DS = 5;
+		const int HOVER_DS = 10;
 		
 		int width;
 		int height;

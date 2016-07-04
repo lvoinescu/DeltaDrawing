@@ -78,8 +78,10 @@
     <Compile Include="DotDrawing\Drawings\PlottedShape.cs" />
     <Compile Include="DotDrawing\Drawings\SimpleLine.cs" />
     <Compile Include="DotDrawing\Geometry\Geometry.cs" />
+    <Compile Include="DotDrawing\ShapeBuilder\State.cs" />
     <Compile Include="DotDrawing\ShapeBuilder\BuilderTool.cs" />
-    <Compile Include="DotDrawing\ShapeBuilder\MouseLineBuilder.cs" />
+    <Compile Include="DotDrawing\ShapeBuilder\CircleBuilder.cs" />
+    <Compile Include="DotDrawing\ShapeBuilder\LineBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

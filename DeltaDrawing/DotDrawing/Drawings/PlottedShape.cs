@@ -82,6 +82,9 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			get {
 				return simpleLines;
 			}
+			set {
+				this.simpleLines = value;
+			}
 		}
 
 		public bool Selected {

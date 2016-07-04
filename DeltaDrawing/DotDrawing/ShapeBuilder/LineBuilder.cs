@@ -27,13 +27,6 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 	public class LineBuilder : BuilderTool
 	{
 		
-		internal enum State
-		{
-			NOT_INITIALIZED,
-			STARTED,
-			ENDED
-
-		}
 		
 		DotDrawing dotDrawing;
 		PlottedShape shape;
@@ -46,10 +39,16 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 			}
 		}
 		
+		public bool Active {
+			get ;
+			set ;
+		}
 
 		public PlottedShape Begin()
 		{
+			Active = true;
 			shape = new PlottedShape();
+			dotDrawing.Drawings.Add(shape);
 			return shape;
 		}
 		public PlottedShape End()
@@ -64,9 +63,12 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 				dotDrawing.Invalidate(invalidatedRegion);
 			}
 			state = State.NOT_INITIALIZED;
-			return new PlottedShape(shape.Points);
+			
+			Active = false;
+			return shape;
 		}
-		public void attach(DotDrawing dotDrawing)
+		
+		public void Attach(DotDrawing dotDrawing)
 		{
 			this.dotDrawing = dotDrawing;
 			dotDrawing.MouseDown += OnMouseDown;
@@ -76,6 +78,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 
 		void OnMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
 		{
+			if(!Active)
+				return;
 			
 			Point p;
 			switch (state) {
@@ -102,9 +106,9 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 					}
 					else
 						p=e.Location;
-					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 2], shape.Points[shape.Points.Count - 1]));
-					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 1], p));
 					shape.AddPoint(p);
+					//shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 2], shape.Points[shape.Points.Count - 1]));
+					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 1], p));
 					Region region = new Region(shape.Bounds);
 					dotDrawing.Invalidate(region);
 					break;

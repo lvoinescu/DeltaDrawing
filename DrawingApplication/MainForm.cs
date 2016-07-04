@@ -29,23 +29,21 @@ namespace DrawingApplication
 	public partial class MainForm : Form
 	{
 		
-		MouseLineBuilder lineBuilder = new MouseLineBuilder();
+		BuilderTool lineBuilder = new LineBuilder();
+		BuilderTool circleBuilder = new CircleBuilder();
+		
 		public MainForm()
 		{
  
 			InitializeComponent();
 			
-			lineBuilder.attach(this.dotDrawing);
+			lineBuilder.Attach(this.dotDrawing);
+			circleBuilder.Attach(this.dotDrawing);
 		}
+		
 		void ToolStripButton1Click(object sender, EventArgs e)
 		{
-			if (toolStripButton1.Checked) {
-				dotDrawing.Drawings.Add(lineBuilder.Begin());
-			} else {
-				var plottedShape = lineBuilder.End();
-				if (plottedShape != null)
-					dotDrawing.Drawings.Add(plottedShape);
-			}
+			lineBuilder.Begin();
 		}
 		
 		
@@ -58,7 +56,8 @@ namespace DrawingApplication
 				switch (keyData) {
 						
 					case Keys.Escape:
-						dotDrawing.Drawings.Add(lineBuilder.End());
+						//dotDrawing.Drawings.Add(lineBuilder.End());
+						lineBuilder.End();
 						break;
 					case Keys.Down:
 						this.Parent.Text = "Down Arrow Captured";
@@ -82,6 +81,16 @@ namespace DrawingApplication
 				}
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
+		}
+		
+		void ToolStripButton2Click(object sender, EventArgs e)
+		{
+			circleBuilder.Begin();
+		}
+		
+		void ToolStripButton3Click(object sender, EventArgs e)
+		{
+	
 		}
 		
 	}

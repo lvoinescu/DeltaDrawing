@@ -18,39 +18,16 @@
  *   along with SamDiagrams. If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Drawing;
 
-namespace DeltaDrawing.DotDrawing.Geometry
+namespace DeltaDrawing.DotDrawing.ShapeBuilder
 {
 	/// <summary>
-	/// Description of Geometry.
+	/// Description of BuilderState.
 	/// </summary>
-	public class Geometry
-	{
-
-		
-		
-		public static double TriangleHeight(Point p1, Point p2, Point pExt)
+		enum State
 		{
-			double a = Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y));
-			double b = Math.Sqrt((pExt.X - p2.X) * (pExt.X - p2.X) + (pExt.Y - p2.Y) * (pExt.Y - p2.Y));
-			double c = Math.Sqrt((pExt.X - p1.X) * (pExt.X - p1.X) + (pExt.Y - p1.Y) * (pExt.Y - p1.Y));
-			                     
-			double s = (double)(a + b + c) / 2;
-			
-			
-			double h = 2 * Math.Sqrt(s * (s - a) * (s - b) * (s - c)) / a;
-			
-			return h;
+			NOT_INITIALIZED,
+			STARTED,
+			ENDED
 		}
-		
-		public static double Distance(Point p1, Point p2)
-		{
-			int dx = p1.X - p2.X;
-			int dy = p1.Y - p2.Y;
-			return Math.Sqrt(dx * dx + dy * dy);
-		}
-		
-	}
-	
 }
