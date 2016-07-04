@@ -30,8 +30,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 	/// </summary>
 	public class CircleBuilder : BuilderTool
 	{
-		const int ANGLE_STEP = 1;
-		const int MIN_ANGLE_STEP = 2;
+		const int ANGLE_STEP = 10;
+		const int MIN_ANGLE_STEP = 4;
 		const int MAX_ANGLE_STEP = 90;
 		
 		PlottedShape shape;
