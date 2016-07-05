@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using DeltaDrawing.DotDrawing.Drawings;
 
 namespace DeltaDrawing.DotDrawing.ShapeBuilder
@@ -33,6 +34,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 		State state;
 		bool snapToGrid = true;
 
+		public event BuildEndedHandler BuildFinished;
+		
 		public PlottedShape Shape {
 			get {
 				return shape;
@@ -58,7 +61,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 			
 			if (shape.Points.Count > 0) {
 				shape.Points.RemoveAt(shape.Points.Count - 1);
-				shape.Components.RemoveAt(shape.Components.Count-1);
+				shape.Components.RemoveAt(shape.Components.Count - 1);
 				Region invalidatedRegion = new Region(shape.Bounds);
 				dotDrawing.Invalidate(invalidatedRegion);
 			}
@@ -74,11 +77,12 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 			dotDrawing.MouseDown += OnMouseDown;
 			dotDrawing.MouseUp += OnMouseUp;
 			dotDrawing.MouseMove += MouseMove;
+			dotDrawing.KeyDown += KeyDown;
 		}
 
 		void OnMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
 		{
-			if(!Active)
+			if (!Active)
 				return;
 			
 			Point p;
@@ -90,8 +94,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 					if (snapToGrid) {
 						int gridSize = dotDrawing.GridSize;
 						p = new Point((int)e.Location.X / gridSize * gridSize, (int)e.Location.Y / gridSize * gridSize);
-					}
-					else
+					} else
 						p = e.Location;
 					
 					shape.AddPoint(p);
@@ -103,9 +106,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 					if (snapToGrid) {
 						int gridSize = dotDrawing.GridSize;
 						p = new Point((int)e.Location.X / gridSize * gridSize, (int)e.Location.Y / gridSize * gridSize);
-					}
-					else
-						p=e.Location;
+					} else
+						p = e.Location;
 					shape.AddPoint(p);
 					//shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 2], shape.Points[shape.Points.Count - 1]));
 					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 1], p));
@@ -140,14 +142,24 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 					int gridSize = dotDrawing.GridSize;
 					Point p = new Point((int)e.Location.X / gridSize * gridSize, (int)e.Location.Y / gridSize * gridSize);
 					shape.Points[shape.Points.Count - 1] = p;
-					shape.Components[shape.Components.Count-1].P2 = p;
+					shape.Components[shape.Components.Count - 1].P2 = p;
 				} else {
 					shape.Points[shape.Points.Count - 1] = e.Location;
-					shape.Components[shape.Components.Count-1].P2 = e.Location;
+					shape.Components[shape.Components.Count - 1].P2 = e.Location;
 				}
 			
 				dotDrawing.Invalidate(shape.Bounds);
 				
+			}
+		}
+
+ 
+		void KeyDown(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.Escape){
+				BuildFinished(this, new ShapeBuildArgs(shape));
+				Active = false;
+				state =  State.NOT_INITIALIZED;
 			}
 		}
 	}

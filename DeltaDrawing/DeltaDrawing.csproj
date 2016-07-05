@@ -78,6 +78,8 @@
     <Compile Include="DotDrawing\Drawings\PlottedShape.cs" />
     <Compile Include="DotDrawing\Drawings\SimpleLine.cs" />
     <Compile Include="DotDrawing\Geometry\Geometry.cs" />
+    <Compile Include="DotDrawing\ShapeBuilder\BuildDelegates.cs" />
+    <Compile Include="DotDrawing\ShapeBuilder\ShapBuildArgs.cs" />
     <Compile Include="DotDrawing\ShapeBuilder\State.cs" />
     <Compile Include="DotDrawing\ShapeBuilder\BuilderTool.cs" />
     <Compile Include="DotDrawing\ShapeBuilder\CircleBuilder.cs" />

@@ -41,7 +41,9 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 		Point center;
 		int angleStep = ANGLE_STEP;
 		int radius = 0;
-		
+		byte clickCount = 0;
+
+		public event BuildEndedHandler BuildFinished;
 
 		public void Attach(DotDrawing dotDrawing)
 		{
@@ -63,6 +65,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 			Active = true;
 			shape = new PlottedShape();
 			dotDrawing.Drawings.Add(shape);
+			clickCount = 0;
 			return shape;
 		}
 
@@ -91,8 +94,15 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 						center = e.Location;
 					}
 					state = State.STARTED;
+					clickCount++;
 					break;
 				case State.STARTED:
+					if(clickCount == 1) {
+						clickCount = 0;
+						state =  State.NOT_INITIALIZED;
+						Active = false;
+						BuildFinished(this, new ShapeBuildArgs(shape));
+					}
 					break;
 				case State.ENDED:
 					break;
@@ -133,7 +143,6 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 					rightBottomPoint = new Point(center.X + radius, center.Y + radius);
 					
 					Rectangle rect = Rectangle.FromLTRB(leftTopPoint.X, leftTopPoint.Y, rightBottomPoint.X, rightBottomPoint.Y);
-					graphics.DrawEllipse(pen, rect);
 					updatePoints(center, radius);
 					dotDrawing.Invalidate(rect);
 				}

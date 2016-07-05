@@ -39,8 +39,14 @@ namespace DrawingApplication
 			
 			lineBuilder.Attach(this.dotDrawing);
 			circleBuilder.Attach(this.dotDrawing);
+			
+			lineBuilder.BuildFinished += BuildFinished;
+			circleBuilder.BuildFinished += BuildFinished;
 		}
-		
+
+		void BuildFinished(object sender, ShapeBuildArgs e)
+		{
+		}
 
 		
 		
@@ -53,7 +59,6 @@ namespace DrawingApplication
 				switch (keyData) {
 						
 					case Keys.Escape:
-						activeBuilder.End();
 						break;
 					case Keys.Down:
 						this.Parent.Text = "Down Arrow Captured";

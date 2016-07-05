@@ -23,16 +23,20 @@ using DeltaDrawing.DotDrawing.Drawings;
 namespace DeltaDrawing.DotDrawing.ShapeBuilder
 {
 	/// <summary>
-	/// Description of BuilderTool.
+	/// Description of ShapBuildArgs.
 	/// </summary>
-	public interface BuilderTool
+	public class ShapeBuildArgs
 	{
-		
-		event BuildEndedHandler BuildFinished;
-		
-		PlottedShape Begin();
-		PlottedShape End();
-		void Attach(DotDrawing dotDrawing);
-		bool Active {get ;set;}
+		PlottedShape shape;
+
+		public PlottedShape Shape {
+			get {
+				return shape;
+			}
+		}
+		public ShapeBuildArgs(PlottedShape shape)
+		{
+			this.shape = shape;
+		}
 	}
 }
