@@ -67,7 +67,15 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				return shape;
 			}
 		}
-		
+
+		public bool SnapToGrid {
+			get {
+				return snapToGrid;
+			}
+			set {
+				snapToGrid = value;
+			}
+		}
 
 		public bool Active { get ; set; }
 	}

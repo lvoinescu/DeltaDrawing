@@ -101,7 +101,14 @@ namespace DrawingApplication
 		
 		void ToolStripButton3Click(object sender, EventArgs e)
 		{
+			activeBuilder = freeBuilder;
 			freeBuilder.Begin();
+		}
+		void ToolStripButton4Click(object sender, EventArgs e)
+		{
+			if (activeBuilder != null) {
+				activeBuilder.SnapToGrid = toolStripButton4.Checked;
+			}
 		}
 		
 	}
