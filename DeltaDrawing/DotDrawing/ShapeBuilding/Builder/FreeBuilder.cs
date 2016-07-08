@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using DeltaDrawing.DotDrawing.Drawings;
 
 namespace DeltaDrawing.DotDrawing.ShapeBuilding
@@ -27,7 +28,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 
 	public class FreeBuilder : AbstractBuilder
 	{
-		const int DEFAULT_CAPACITY = 10000;
+		const int DEFAULT_CAPACITY = 100;
 		bool paint = false;
 		
 
@@ -39,7 +40,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			dotDrawing.MouseMove += MouseMove;
 		}
 		
-		void OnMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+		void OnMouseDown(object sender, MouseEventArgs e)
 		{
 			if (!Active)
 				return;
@@ -70,25 +71,23 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			}
 		}
 
-		void OnMouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		void OnMouseUp(object sender, MouseEventArgs e)
 		{
 			paint = false;
 			if (state == State.NOT_INITIALIZED)
 				return;
 			
 			if (shape.Points.Count > 0) {
-				shape.Points.RemoveAt(shape.Points.Count - 1);
-				shape.Components.RemoveAt(shape.Components.Count - 1);
 				Region invalidatedRegion = new Region(shape.Bounds);
-				dotDrawing.Drawings.Add(shape);
-				shape = new PlottedShape();
 				dotDrawing.Invalidate(invalidatedRegion);
+				shape = new PlottedShape();
+				dotDrawing.Drawings.Add(shape);
 			}
 			
 			state = State.NOT_INITIALIZED;
 		}
 
-		void MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+		void MouseMove(object sender, MouseEventArgs e)
 		{
 
 			if (state == State.NOT_INITIALIZED)
@@ -109,10 +108,10 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				Point lastPoint = shape.Points[shape.Points.Count - 1];
 				shape.Components.Add(new SimpleLine(lastPoint, newPoint));
 			
-				dotDrawing.Invalidate(shape.Bounds);
-				
 			}
+				
 			shape.Points.Add(newPoint);
+			dotDrawing.Invalidate(shape.Bounds);
 
 		}
 		

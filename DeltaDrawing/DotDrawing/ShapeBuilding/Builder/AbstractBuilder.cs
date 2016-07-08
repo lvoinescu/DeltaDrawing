@@ -58,7 +58,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			}
 			state = State.NOT_INITIALIZED;
 			
-			Active = false;
+			//Active = false;
 			return shape;
 		}
 		

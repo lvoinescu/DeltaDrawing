@@ -21,9 +21,6 @@ namespace DeltaDrawing.DotDrawing
 	public partial class DotDrawing : UserControl
 	{
 		const int HOVER_DS = 10;
-		
-		int width;
-		int height;
 		int gridSize;
 		
 		double scale;
@@ -50,7 +47,7 @@ namespace DeltaDrawing.DotDrawing
 			gridDrawer = new GridDrawer(this, 10);
 			InitializeComponent();
 			SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw |
-			ControlStyles.DoubleBuffer | ControlStyles.UserPaint, true);
+			ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.UserMouse , true);
 		}
 		
 		
@@ -61,7 +58,7 @@ namespace DeltaDrawing.DotDrawing
 			e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
 			
-			base.OnPaint(e);
+
 						
 			int red = r.Next(255);
 			int green = r.Next(255);
@@ -81,6 +78,7 @@ namespace DeltaDrawing.DotDrawing
 					drawing.Draw(graphics);
 					//}
 				}
+			base.OnPaint(e);
 		}
 		
 		

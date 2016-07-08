@@ -45,8 +45,16 @@ namespace DeltaDrawing.DotDrawing.Drawings
 		public PlottedShape(List<Point> points)
 		{
 			Point[] pointArray = points.ToArray();
-			this.Points = new List<Point>(pointArray);
-			simpleLines = new List<SimpleLine>();
+			this.Points = new List<Point>(points.Count);
+			simpleLines = new List<SimpleLine>(points.Count + 1);
+			
+			foreach (Point p in points) {
+				Points.Add(new Point(p.X, p.Y));
+			}
+			
+			for (int i = 0; i < Points.Count - 2; i++) {
+				Components.Add(new SimpleLine(Points[i], Points[i + 1]));
+			}
 			bounds = GetBounds();
 		}
 		
