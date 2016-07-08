@@ -19,7 +19,7 @@
  */
 using System;
 using System.Windows.Forms;
-using DeltaDrawing.DotDrawing.ShapeBuilder;
+using DeltaDrawing.DotDrawing.ShapeBuilding;
 
 namespace DrawingApplication
 {
@@ -29,9 +29,10 @@ namespace DrawingApplication
 	public partial class MainForm : Form
 	{
 		
-		BuilderTool lineBuilder = new LineBuilder();
-		BuilderTool circleBuilder = new CircleBuilder();
-		BuilderTool activeBuilder;
+		AbstractBuilder lineBuilder = new LineBuilder();
+		AbstractBuilder circleBuilder = new CircleBuilder();
+		AbstractBuilder freeBuilder = new FreeBuilder();
+		AbstractBuilder activeBuilder;
 		public MainForm()
 		{
  
@@ -39,6 +40,7 @@ namespace DrawingApplication
 			
 			lineBuilder.Attach(this.dotDrawing);
 			circleBuilder.Attach(this.dotDrawing);
+			freeBuilder.Attach(this.dotDrawing);
 			
 			lineBuilder.BuildFinished += BuildFinished;
 			circleBuilder.BuildFinished += BuildFinished;
@@ -46,6 +48,7 @@ namespace DrawingApplication
 
 		void BuildFinished(object sender, ShapeBuildArgs e)
 		{
+			//dotDrawing.Drawings.Add(e.Shape);
 		}
 
 		
@@ -98,7 +101,7 @@ namespace DrawingApplication
 		
 		void ToolStripButton3Click(object sender, EventArgs e)
 		{
-	
+			freeBuilder.Begin();
 		}
 		
 	}

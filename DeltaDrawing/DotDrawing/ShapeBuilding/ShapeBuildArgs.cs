@@ -20,7 +20,7 @@
 using System;
 using DeltaDrawing.DotDrawing.Drawings;
 
-namespace DeltaDrawing.DotDrawing.ShapeBuilder
+namespace DeltaDrawing.DotDrawing.ShapeBuilding
 {
 	/// <summary>
 	/// Description of ShapBuildArgs.

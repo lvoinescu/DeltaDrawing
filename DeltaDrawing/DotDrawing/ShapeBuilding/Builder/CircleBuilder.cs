@@ -23,58 +23,31 @@ using System.Drawing;
 using System.Windows.Forms;
 using DeltaDrawing.DotDrawing.Drawings;
 
-namespace DeltaDrawing.DotDrawing.ShapeBuilder
+namespace DeltaDrawing.DotDrawing.ShapeBuilding
 {
 	/// <summary>
 	/// Description of CircleBuilder.
 	/// </summary>
-	public class CircleBuilder : BuilderTool
+	public class CircleBuilder : AbstractBuilder
 	{
 		const int ANGLE_STEP = 10;
 		const int MIN_ANGLE_STEP = 4;
 		const int MAX_ANGLE_STEP = 90;
 		
-		PlottedShape shape;
-		DotDrawing dotDrawing;
-		State state;
-		bool snapToGrid = true;
 		Point center;
 		int angleStep = ANGLE_STEP;
 		int radius = 0;
 		byte clickCount = 0;
 
-		public event BuildEndedHandler BuildFinished;
-
-		public void Attach(DotDrawing dotDrawing)
+		public override void Attach(DotDrawing dotDrawing)
 		{
 			this.dotDrawing = dotDrawing;
 			state = State.NOT_INITIALIZED;
 			dotDrawing.MouseDown += OnMouseDown;
-			dotDrawing.MouseUp += OnMouseUp;
 			dotDrawing.MouseMove += MouseMove;
 			dotDrawing.MouseWheel += MouseWheel;
 		}
 
-		public bool Active {
-			get ;
-			set ;
-		}
-		
-		public PlottedShape Begin()
-		{
-			Active = true;
-			shape = new PlottedShape();
-			dotDrawing.Drawings.Add(shape);
-			clickCount = 0;
-			return shape;
-		}
-
-		public PlottedShape End()
-		{
-			Active = false;
-			state = State.NOT_INITIALIZED;
-			return shape;
-		}
 
 		void OnMouseDown(object sender, MouseEventArgs e)
 		{
@@ -101,7 +74,6 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 						clickCount = 0;
 						state =  State.NOT_INITIALIZED;
 						Active = false;
-						BuildFinished(this, new ShapeBuildArgs(shape));
 					}
 					break;
 				case State.ENDED:
@@ -109,10 +81,6 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 			}
 		}
 
-		void OnMouseUp(object sender, MouseEventArgs e)
-		{
-			//throw new NotImplementedException();
-		}
 
 		void MouseMove(object sender, MouseEventArgs e)
 		{
@@ -157,6 +125,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 		
 		void MouseWheel(object sender, MouseEventArgs e)
 		{
+			if(!Active)
+				return;
 			var deltaAngle = e.Delta * SystemInformation.MouseWheelScrollLines / 120;
 			angleStep += deltaAngle;
 			
@@ -186,7 +156,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 		}
 			
 		
-		private List<SimpleLine> ConnectDots(List<Point> points)
+		List<SimpleLine> ConnectDots(List<Point> points)
 		{
 			List<SimpleLine> lines = new List<SimpleLine>();
 			for (int i = 0; i < points.Count - 1; i++) {

@@ -58,8 +58,8 @@ namespace DeltaDrawing.DotDrawing
 		
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+			e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
 			
 			base.OnPaint(e);
 						

@@ -78,12 +78,13 @@
     <Compile Include="DotDrawing\Drawings\PlottedShape.cs" />
     <Compile Include="DotDrawing\Drawings\SimpleLine.cs" />
     <Compile Include="DotDrawing\Geometry\Geometry.cs" />
-    <Compile Include="DotDrawing\ShapeBuilder\BuildDelegates.cs" />
-    <Compile Include="DotDrawing\ShapeBuilder\ShapBuildArgs.cs" />
-    <Compile Include="DotDrawing\ShapeBuilder\State.cs" />
-    <Compile Include="DotDrawing\ShapeBuilder\BuilderTool.cs" />
-    <Compile Include="DotDrawing\ShapeBuilder\CircleBuilder.cs" />
-    <Compile Include="DotDrawing\ShapeBuilder\LineBuilder.cs" />
+    <Compile Include="DotDrawing\ShapeBuilding\BuildDelegates.cs" />
+    <Compile Include="DotDrawing\ShapeBuilding\Builder\AbstractBuilder.cs" />
+    <Compile Include="DotDrawing\ShapeBuilding\Builder\CircleBuilder.cs" />
+    <Compile Include="DotDrawing\ShapeBuilding\Builder\FreeBuilder.cs" />
+    <Compile Include="DotDrawing\ShapeBuilding\Builder\LineBuilder.cs" />
+    <Compile Include="DotDrawing\ShapeBuilding\ShapeBuildArgs.cs" />
+    <Compile Include="DotDrawing\ShapeBuilding\State.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,7 +96,8 @@
     <Folder Include="DotDrawing" />
     <Folder Include="DotDrawing\Drawings" />
     <Folder Include="DotDrawing\Geometry" />
-    <Folder Include="DotDrawing\ShapeBuilder" />
+    <Folder Include="DotDrawing\ShapeBuilding" />
+    <Folder Include="DotDrawing\ShapeBuilding\Builder" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

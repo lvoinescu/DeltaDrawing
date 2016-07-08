@@ -54,8 +54,8 @@ namespace DeltaDrawing.DotDrawing.Drawings
 		{
 			Points.Add(p);
 			bounds = GetBounds();
-			if(Points.Count>1) {
-				Components.Add(new SimpleLine(Points[Points.Count-2], Points[Points.Count -1]));
+			if (Points.Count > 1) {
+				Components.Add(new SimpleLine(Points[Points.Count - 2], Points[Points.Count - 1]));
 			}
 		}
 

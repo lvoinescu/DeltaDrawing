@@ -19,15 +19,7 @@
  */
 using System;
 
-namespace DeltaDrawing.DotDrawing.ShapeBuilder
+namespace DeltaDrawing.DotDrawing.ShapeBuilding
 {
-	/// <summary>
-	/// Description of BuilderState.
-	/// </summary>
-		enum State
-		{
-			NOT_INITIALIZED,
-			STARTED,
-			ENDED
-		}
+		public delegate void BuildEndedHandler(object sender, ShapeBuildArgs e);
 }

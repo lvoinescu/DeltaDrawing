@@ -18,21 +18,16 @@
  *   along with SamDiagrams. If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using DeltaDrawing.DotDrawing.Drawings;
 
-namespace DeltaDrawing.DotDrawing.ShapeBuilder
+namespace DeltaDrawing.DotDrawing.ShapeBuilding
 {
 	/// <summary>
-	/// Description of BuilderTool.
+	/// Description of BuilderState.
 	/// </summary>
-	public interface BuilderTool
-	{
-		
-		event BuildEndedHandler BuildFinished;
-		
-		PlottedShape Begin();
-		PlottedShape End();
-		void Attach(DotDrawing dotDrawing);
-		bool Active {get ;set;}
-	}
+		public enum State
+		{
+			NOT_INITIALIZED,
+			STARTED,
+			ENDED
+		}
 }

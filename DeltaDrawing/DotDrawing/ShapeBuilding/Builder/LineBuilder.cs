@@ -23,64 +23,23 @@ using System.Drawing;
 using System.Windows.Forms;
 using DeltaDrawing.DotDrawing.Drawings;
 
-namespace DeltaDrawing.DotDrawing.ShapeBuilder
+namespace DeltaDrawing.DotDrawing.ShapeBuilding
 {
-	public class LineBuilder : BuilderTool
+	public class LineBuilder : AbstractBuilder
 	{
 		
 		
-		DotDrawing dotDrawing;
-		PlottedShape shape;
-		State state;
-		bool snapToGrid = true;
 
-		public event BuildEndedHandler BuildFinished;
-		
-		public PlottedShape Shape {
-			get {
-				return shape;
-			}
-		}
-		
-		public bool Active {
-			get ;
-			set ;
-		}
 
-		public PlottedShape Begin()
-		{
-			Active = true;
-			shape = new PlottedShape();
-			dotDrawing.Drawings.Add(shape);
-			return shape;
-		}
-		public PlottedShape End()
-		{
-			if (state == State.NOT_INITIALIZED)
-				return null;
-			
-			if (shape.Points.Count > 0) {
-				shape.Points.RemoveAt(shape.Points.Count - 1);
-				shape.Components.RemoveAt(shape.Components.Count - 1);
-				Region invalidatedRegion = new Region(shape.Bounds);
-				dotDrawing.Invalidate(invalidatedRegion);
-			}
-			state = State.NOT_INITIALIZED;
-			
-			Active = false;
-			return shape;
-		}
-		
-		public void Attach(DotDrawing dotDrawing)
+		public override void Attach(DotDrawing dotDrawing)
 		{
 			this.dotDrawing = dotDrawing;
 			dotDrawing.MouseDown += OnMouseDown;
-			dotDrawing.MouseUp += OnMouseUp;
 			dotDrawing.MouseMove += MouseMove;
 			dotDrawing.KeyDown += KeyDown;
 		}
 
-		void OnMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+		void OnMouseDown(object sender, MouseEventArgs e)
 		{
 			if (!Active)
 				return;
@@ -109,10 +68,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 					} else
 						p = e.Location;
 					shape.AddPoint(p);
-					//shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 2], shape.Points[shape.Points.Count - 1]));
 					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 1], p));
-					Region region = new Region(shape.Bounds);
-					dotDrawing.Invalidate(region);
+					dotDrawing.Invalidate(new Region(shape.Bounds));
 					break;
 				case State.ENDED:
 
@@ -120,12 +77,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 			}
 		}
 
-		void OnMouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-		{
-			//NOPE
-		}
 
-		void MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+		void MouseMove(object sender, MouseEventArgs e)
 		{
 			if (state == State.NOT_INITIALIZED)
 				return;
@@ -141,6 +94,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
 				if (snapToGrid) {
 					int gridSize = dotDrawing.GridSize;
 					Point p = new Point((int)e.Location.X / gridSize * gridSize, (int)e.Location.Y / gridSize * gridSize);
+					
 					shape.Points[shape.Points.Count - 1] = p;
 					shape.Components[shape.Components.Count - 1].P2 = p;
 				} else {
@@ -156,10 +110,13 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilder
  
 		void KeyDown(object sender, KeyEventArgs e)
 		{
-			if(e.KeyCode == Keys.Escape){
-				BuildFinished(this, new ShapeBuildArgs(shape));
+			if (e.KeyCode == Keys.Escape) {
 				Active = false;
-				state =  State.NOT_INITIALIZED;
+				if (shape.Points.Count > 0) {
+					shape.Points.RemoveAt(shape.Points.Count - 1);
+					shape.Components.RemoveAt(shape.Components.Count - 1);
+				}
+				state = State.NOT_INITIALIZED;
 			}
 		}
 	}
