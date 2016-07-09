@@ -32,7 +32,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 	{
 		const int ANGLE_STEP = 10;
 		const int MIN_ANGLE_STEP = 4;
-		const int MAX_ANGLE_STEP = 90;
+		const int MAX_ANGLE_STEP = 120;
 		
 		Point center;
 		int angleStep = ANGLE_STEP;

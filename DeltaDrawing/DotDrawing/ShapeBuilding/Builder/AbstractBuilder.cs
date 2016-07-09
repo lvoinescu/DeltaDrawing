@@ -33,7 +33,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 		protected PlottedShape shape;
 		protected DotDrawing dotDrawing;
 		protected State state;
-		protected bool snapToGrid = true;
+		protected bool snapToGrid = false;
 		
 		public abstract void Attach(DotDrawing dotDrawing);
 		
