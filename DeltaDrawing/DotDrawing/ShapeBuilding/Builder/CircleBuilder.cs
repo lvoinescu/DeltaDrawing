@@ -31,8 +31,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 	public class CircleBuilder : AbstractBuilder
 	{
 		const int ANGLE_STEP = 10;
-		const int MIN_ANGLE_STEP = 4;
-		const int MAX_ANGLE_STEP = 120;
+		const int MIN_ANGLE_STEP = 1;
+		const int MAX_ANGLE_STEP = 180;
 		
 		Point center;
 		int angleStep = ANGLE_STEP;
