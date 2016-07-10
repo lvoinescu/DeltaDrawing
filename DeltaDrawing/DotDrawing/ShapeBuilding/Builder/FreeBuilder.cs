@@ -76,8 +76,14 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 		void OnMouseUp(object sender, MouseEventArgs e)
 		{
 			paint = false;
+
 			if (state == State.NOT_INITIALIZED)
 				return;
+			
+			if (shape.Points.Count < 2) {
+				shape.Points.Clear();
+				shape.Components.Clear();
+			}
 			
 			state = State.NOT_INITIALIZED;
 		}

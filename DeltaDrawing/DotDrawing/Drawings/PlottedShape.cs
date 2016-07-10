@@ -28,6 +28,8 @@ namespace DeltaDrawing.DotDrawing.Drawings
 		public event RedrawRequiredHandler RedrawRequired;
 
 		const int RADIUS = 5;
+		const int CROSS_SIZE = 4;
+		
 		IDrawing parent;
 
 		Rectangle bounds;
@@ -103,9 +105,16 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			
 			if (Selected) {
 				graphics.DrawRectangle(Pens.CadetBlue, Bounds);
+				DrawCenter(graphics);
 			}
 			
 			NeedsRedrawing = false;
+		}
+		
+		protected void DrawCenter(Graphics graphics)
+		{
+			graphics.DrawLine(Pens.Red, Center.X, Center.Y - CROSS_SIZE, Center.X, Center.Y + CROSS_SIZE);
+			graphics.DrawLine(Pens.Red, Center.X - CROSS_SIZE, Center.Y, Center.X + CROSS_SIZE, Center.Y);
 		}
 
 		public List<SimpleLine> Components {
@@ -168,9 +177,15 @@ namespace DeltaDrawing.DotDrawing.Drawings
 		public void Update()
 		{
 			NeedsRedrawing = true;
-			if(parent!= null)
+			if (parent != null)
 				parent.NeedsRedrawing = true;
 			RedrawRequired(this);
+		}
+		
+		protected Point Center {
+			get {
+				return new Point(Bounds.Left + Bounds.Width / 2, Bounds.Top + Bounds.Height / 2);
+			}
 		}
 	}
 }

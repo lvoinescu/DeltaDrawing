@@ -119,6 +119,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				Active = false;
 				if (shape.Points.Count > 0) {
 					shape.Points.RemoveAt(shape.Points.Count - 1);
+					shape.Components.RemoveAt(shape.Components.Count - 1);
 					shape.Update();
 				}
 				state = State.NOT_INITIALIZED;
