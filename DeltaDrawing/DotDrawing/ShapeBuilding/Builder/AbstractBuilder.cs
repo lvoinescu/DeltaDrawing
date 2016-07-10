@@ -47,9 +47,10 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 		
 		public PlottedShape End()
 		{
+			state = State.NOT_INITIALIZED;
+			
 			if (state == State.NOT_INITIALIZED)
 				return null;
-			
 			if (shape.Points.Count > 0) {
 				shape.Points.RemoveAt(shape.Points.Count - 1);
 				shape.Components.RemoveAt(shape.Components.Count - 1);
@@ -57,9 +58,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				shape.NeedsRedrawing = true;
 				//dotDrawing.Invalidate(invalidatedRegion);
 			}
-			state = State.NOT_INITIALIZED;
 			
-			//Active = false;
+			Active = false;
 			return shape;
 		}
 		

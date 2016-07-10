@@ -113,18 +113,27 @@ namespace DrawingApplication
 		void ToolStripButton1Click(object sender, EventArgs e)
 		{
 			activeBuilder = lineBuilder;
+			freeBuilder.Active = false;
+			circleBuilder.Active = false;
+			
 			lineBuilder.Begin();
 		}
 		
 		void ToolStripButton2Click(object sender, EventArgs e)
 		{
 			activeBuilder = circleBuilder;
+			freeBuilder.Active = false;
+			lineBuilder.Active = false;
+			
 			circleBuilder.Begin();
 		}
 		
 		void ToolStripButton3Click(object sender, EventArgs e)
 		{
 			activeBuilder = freeBuilder;
+			lineBuilder.Active = false;
+			circleBuilder.Active = false;
+			
 			freeBuilder.Begin();
 		}
 		void ToolStripButton4Click(object sender, EventArgs e)
