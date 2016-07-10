@@ -87,6 +87,7 @@
     <Compile Include="DotDrawing\ShapeBuilding\State.cs" />
     <Compile Include="DotDrawing\ShapeBuilding\Transformation\ITransformation.cs" />
     <Compile Include="DotDrawing\ShapeBuilding\Transformation\Rotation.cs" />
+    <Compile Include="DotDrawing\ShapeBuilding\Transformation\Translation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
