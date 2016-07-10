@@ -20,15 +20,19 @@ namespace DeltaDrawing.DotDrawing.Drawings
 		event RedrawRequiredHandler RedrawRequired;
 		
 		
-		List<SimpleLine> Components { get; }
+		List<Point> Points { get; set; }
+		List<SimpleLine> Components { get; set; }
+		
 		bool Highlighted { get; set; }
 		bool Selected { get; set; }
 		bool NeedsRedrawing { get; set; }
-		void Draw(Graphics graphics);
-		Rectangle Bounds { get; }
-		List<Point> Points { get; set; }
+		
 		IDrawing Parent{ get; }
 		
+		Point Center { get; }
+		Rectangle Bounds { get; }
+		
+		void Draw(Graphics graphics);
 		void Update();
 	}
 }

@@ -77,6 +77,9 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			get {
 				throw new NotImplementedException();
 			}
+			set {
+				
+			}
 		}
 
 		public IDrawing Parent {
@@ -125,6 +128,10 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			if (RedrawRequired != null) {
 				RedrawRequired(this);
 			}
+		}
+		
+		public Point Center {
+			get { return new Point((P1.X + P2.X) / 2, (P1.Y + P2.Y) / 2); }
 		}
 	}
 }

@@ -122,7 +122,10 @@ namespace DeltaDrawing.DotDrawing.Drawings
 				return simpleLines;
 			}
 			set {
-				this.simpleLines = value;
+				simpleLines = value;
+				foreach (var simpleLine in simpleLines) {
+					simpleLine.Parent = this;
+				}
 			}
 		}
 
@@ -184,7 +187,7 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			RedrawRequired(this);
 		}
 		
-		protected Point Center {
+		public Point Center {
 			get {
 				return new Point(Bounds.Left + Bounds.Width / 2, Bounds.Top + Bounds.Height / 2);
 			}

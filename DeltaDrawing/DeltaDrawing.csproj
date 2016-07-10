@@ -69,12 +69,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DotDrawing\Actions\Action.cs" />
+    <Compile Include="DotDrawing\Actions\ActionManager.cs" />
+    <Compile Include="DotDrawing\Actions\TranslateAction.cs" />
     <Compile Include="DotDrawing\DotDrawing.cs" />
     <Compile Include="DotDrawing\DotDrawing.Designer.cs">
       <DependentUpon>DotDrawing.cs</DependentUpon>
     </Compile>
     <Compile Include="DotDrawing\Drawings\GridDrawing.cs" />
     <Compile Include="DotDrawing\Drawings\IDrawing.cs" />
+    <Compile Include="DotDrawing\Drawings\LineConnection.cs" />
     <Compile Include="DotDrawing\Drawings\PlottedShape.cs" />
     <Compile Include="DotDrawing\Drawings\SimpleLine.cs" />
     <Compile Include="DotDrawing\Geometry\Geometry.cs" />
@@ -99,6 +103,7 @@
     <Folder Include="DotDrawing" />
     <Folder Include="DotDrawing\Drawings" />
     <Folder Include="DotDrawing\Geometry" />
+    <Folder Include="DotDrawing\Actions" />
     <Folder Include="DotDrawing\ShapeBuilding" />
     <Folder Include="DotDrawing\ShapeBuilding\Builder" />
     <Folder Include="DotDrawing\ShapeBuilding\Transformation" />

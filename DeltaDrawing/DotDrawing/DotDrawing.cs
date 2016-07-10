@@ -22,10 +22,12 @@ namespace DeltaDrawing.DotDrawing
 	{
 		const int HOVER_DS = 10;
 		Random r = new Random(255);
-		
-		int gridSize;
-		
+		ActionManager actionManager;
 		Rectangle previousDrawnRegion;
+		GridDrawer gridDrawer;
+		
+		
+		
 		public int GridSize {
 			get {
 				return gridDrawer.GridSize;
@@ -34,7 +36,6 @@ namespace DeltaDrawing.DotDrawing
 				gridDrawer.GridSize = value;
 			}
 		}
-		GridDrawer gridDrawer;
 		
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<IDrawing> Drawings {
@@ -45,6 +46,7 @@ namespace DeltaDrawing.DotDrawing
 		public DotDrawing()
 		{
 			Drawings = new List<IDrawing>();
+			actionManager = new ActionManager(this);
 			gridDrawer = new GridDrawer(this, 10);
 			InitializeComponent();
 			SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw |
@@ -61,12 +63,8 @@ namespace DeltaDrawing.DotDrawing
 		{
 			sender.NeedsRedrawing = true;
 			var toInvalidate = GetRegionToRedraw(sender.Bounds);
-			//Rectangle toInvalidate = Rectangle.Union(previousDrawnRegion, rectangle);
-			//previousDrawnRegion.Inflate(10, 10);
 			Invalidate(toInvalidate);
 			previousDrawnRegion = toInvalidate;
-			
-			
 		}
 		
 		protected override void OnPaint(PaintEventArgs e)
