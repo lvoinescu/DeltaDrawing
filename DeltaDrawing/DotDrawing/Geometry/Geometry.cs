@@ -51,6 +51,19 @@ namespace DeltaDrawing.DotDrawing.Geometry
 			return Math.Sqrt(dx * dx + dy * dy);
 		}
 		
+		public static double Angle3Points(Point center, Point p1, Point p2)
+		{
+			double a = Math.Sqrt(Math.Pow((center.X - p1.X), 2) + Math.Pow(center.Y - p1.Y, 2));
+			double b = Math.Sqrt(Math.Pow((center.X - p2.X), 2) + Math.Pow(center.Y - p2.Y, 2));
+			double c = Math.Sqrt(Math.Pow((p1.X - p2.X), 2) + Math.Pow(p1.Y - p2.Y, 2));
+		
+			if (a * b != 0) {
+				return 180 * Math.Acos((a * a + b * b - c * c) / (2 * a * b))/Math.PI;
+			} else
+				return 0;
+		
+		}
+		
 	}
 	
 }

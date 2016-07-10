@@ -29,6 +29,7 @@ namespace DeltaDrawing.DotDrawing
 	{
 		DotDrawing dotDrawing;
 		TranslateAction translate;
+		RotateAction rotate;
 		
 		
 		public ActionManager(DotDrawing dotDrawing)
@@ -36,11 +37,13 @@ namespace DeltaDrawing.DotDrawing
 			this.dotDrawing = dotDrawing;
 			
 			translate = new TranslateAction(dotDrawing);
+			rotate = new RotateAction(dotDrawing);
 		}
 		
 		
 		public void ActivateTranslation() {
 			translate.Activated = true;
+			rotate.Activated = true;
 		}
  
  

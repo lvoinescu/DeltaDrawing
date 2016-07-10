@@ -32,6 +32,11 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding.Transformation
 		public int Angle { get; set; }
 		public Point Center { get; set; }
 		
+		public Rotation(Point center, int angle) {
+			this.Center = center;
+			this.Angle = angle;
+		}
+		
 		public List<Point> Transform(List<Point> points)
 		{
 			List<Point> transforationPoints = new List<Point>(points.Count);

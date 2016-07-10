@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="DotDrawing\Actions\Action.cs" />
     <Compile Include="DotDrawing\Actions\ActionManager.cs" />
+    <Compile Include="DotDrawing\Actions\RotateAction.cs" />
     <Compile Include="DotDrawing\Actions\TranslateAction.cs" />
     <Compile Include="DotDrawing\DotDrawing.cs" />
     <Compile Include="DotDrawing\DotDrawing.Designer.cs">

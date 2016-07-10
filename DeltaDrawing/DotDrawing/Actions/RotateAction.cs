@@ -29,16 +29,16 @@ namespace DeltaDrawing.DotDrawing.Actions
 	/// <summary>
 	/// Description of TranslateAction.
 	/// </summary>
-	public class TranslateAction
+	public class RotateAction
 	{
 		const int CENTER_PAD = 6;
 		readonly DotDrawing dotDrawing;
 		Point initialLocation;
 		IDrawing selectedDrawing;
 		
-		public bool Activated {get; set;}
+		public bool Activated { get; set; }
 		
-		public TranslateAction(DotDrawing dotDrawing)
+		public RotateAction(DotDrawing dotDrawing)
 		{
 			this.dotDrawing = dotDrawing;
 			dotDrawing.MouseDown += dotDrawing_MouseDown;
@@ -49,7 +49,7 @@ namespace DeltaDrawing.DotDrawing.Actions
 		void dotDrawing_MouseDown(object sender, MouseEventArgs e)
 		{
 			selectedDrawing = CheckStart(e.Location);
-			if(selectedDrawing != null) {
+			if (selectedDrawing != null) {
 				Activated = true;
 				initialLocation = e.Location;
 			}
@@ -58,13 +58,18 @@ namespace DeltaDrawing.DotDrawing.Actions
 
 		void dotDrawing_MouseMove(object sender, MouseEventArgs e)
 		{
-			if(!Activated)
+			if (!Activated)
 				return;
 			
-			int dx = e.X - initialLocation.X ;
-			int dy = e.Y - initialLocation.Y ;
+
+			int angle = (int)Geometry.Geometry.Angle3Points(selectedDrawing.Center, initialLocation, e.Location);
 			
-			ITransformation transformation = new Translation(dx, dy);
+			if(Math.Pow(initialLocation.X, 2) + Math.Pow(initialLocation.Y, 2) >
+				Math.Pow(e.Location.X, 2) + Math.Pow(e.Location.Y, 2)) {
+				angle = -angle;
+			}
+			
+			ITransformation transformation = new Rotation(selectedDrawing.Center, angle);
 			List<Point> newPoints = transformation.Transform(selectedDrawing.Points);
 			
 			List<SimpleLine> lines = new LineConnection(newPoints).Lines();
@@ -73,7 +78,7 @@ namespace DeltaDrawing.DotDrawing.Actions
 			selectedDrawing.Components = lines;
 			
 			selectedDrawing.Update();
-			initialLocation = e.Location;
+
 		}
 
 		void dotDrawing_MouseUp(object sender, MouseEventArgs e)
@@ -84,11 +89,15 @@ namespace DeltaDrawing.DotDrawing.Actions
 		IDrawing CheckStart(Point p)
 		{
 			foreach (var drawing in dotDrawing.Drawings) {
-				Point c1 = drawing.Center;
-				Point c2 = drawing.Center;
+
+				Point topRightCorner = new Point(drawing.Bounds.Left + drawing.Bounds.Width,
+					                       drawing.Bounds.Top);
+				initialLocation = p;
+				
+				Point c1 = topRightCorner;
+				Point c2 = topRightCorner;
 				c1.Offset(-CENTER_PAD, -CENTER_PAD);
 				c2.Offset(CENTER_PAD, CENTER_PAD);
-				
 				
 				Rectangle r = Rectangle.FromLTRB(c1.X, c1.Y, c2.X, c2.Y);
 				

@@ -32,6 +32,7 @@ namespace DrawingApplication
 		private System.Windows.Forms.ToolStripButton toolStripButton3;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton snapToGridButton;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -62,6 +63,7 @@ namespace DrawingApplication
 			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.snapToGridButton = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -85,6 +87,7 @@ namespace DrawingApplication
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.toolStripButton1,
 			this.toolStripButton2,
+			this.toolStripSeparator2,
 			this.toolStripButton3,
 			this.toolStripSeparator1,
 			this.snapToGridButton});
@@ -116,6 +119,7 @@ namespace DrawingApplication
 			// 
 			// toolStripButton3
 			// 
+			this.toolStripButton3.CheckOnClick = true;
 			this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
 			this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -141,6 +145,11 @@ namespace DrawingApplication
 			this.snapToGridButton.Size = new System.Drawing.Size(23, 22);
 			this.snapToGridButton.Text = "Snap to grid";
 			this.snapToGridButton.Click += new System.EventHandler(this.ToolStripButton4Click);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
 			// 
 			// MainForm
 			// 

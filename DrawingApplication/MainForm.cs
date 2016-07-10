@@ -116,6 +116,9 @@ namespace DrawingApplication
 			freeBuilder.Active = false;
 			circleBuilder.Active = false;
 			
+			toolStripButton2.Checked = false;
+			toolStripButton3.Checked = false;
+			
 			lineBuilder.Begin();
 		}
 		
@@ -125,6 +128,9 @@ namespace DrawingApplication
 			freeBuilder.Active = false;
 			lineBuilder.Active = false;
 			
+			toolStripButton1.Checked = false;
+			toolStripButton3.Checked = false;
+			
 			circleBuilder.Begin();
 		}
 		
@@ -133,8 +139,13 @@ namespace DrawingApplication
 			activeBuilder = freeBuilder;
 			lineBuilder.Active = false;
 			circleBuilder.Active = false;
-			
-			freeBuilder.Begin();
+			if (toolStripButton3.Checked) {
+				freeBuilder.Begin();
+				toolStripButton1.Checked = false;
+				toolStripButton2.Checked = false;
+			} else {
+				freeBuilder.Active = false;
+			}
 		}
 		void ToolStripButton4Click(object sender, EventArgs e)
 		{
