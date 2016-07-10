@@ -25,8 +25,7 @@ namespace DeltaDrawing.DotDrawing
 		
 		int gridSize;
 		
-		double scale;
-
+		Rectangle previousDrawnRegion;
 		public int GridSize {
 			get {
 				return gridDrawer.GridSize;
@@ -61,8 +60,13 @@ namespace DeltaDrawing.DotDrawing
 		void shape_RedrawRequired(IDrawing sender)
 		{
 			sender.NeedsRedrawing = true;
-			Rectangle toInvalidate = GetRegionToRedraw(sender.Bounds);
+			var toInvalidate = GetRegionToRedraw(sender.Bounds);
+			//Rectangle toInvalidate = Rectangle.Union(previousDrawnRegion, rectangle);
+			//previousDrawnRegion.Inflate(10, 10);
 			Invalidate(toInvalidate);
+			previousDrawnRegion = toInvalidate;
+			
+			
 		}
 		
 		protected override void OnPaint(PaintEventArgs e)
@@ -76,10 +80,12 @@ namespace DeltaDrawing.DotDrawing
 			int green = r.Next(255);
 			int blue = r.Next(255);
 			
-			GetRegionToRedraw(e.ClipRectangle);
+			Rectangle ri = e.ClipRectangle;
+			
+			GetRegionToRedraw(ri);
 			
 			Color color = Color.FromArgb(100, red, green, blue);
-//			e.Graphics.FillRectangle(new SolidBrush(color), e.ClipRectangle);
+			//e.Graphics.FillRectangle(new SolidBrush(color), ri);
 			
 			var graphics = e.Graphics;
 			if (gridDrawer != null)
@@ -135,7 +141,7 @@ namespace DeltaDrawing.DotDrawing
 			IDrawing closestDrawing = GetClosestDrawing(e.Location);
 			if (closestDrawing != null) {
 				UpdateHighLighted(closestDrawing);
-				Invalidate(GetRegionToRedraw(closestDrawing.Bounds));
+				GetRegionToRedraw(closestDrawing.Bounds);
 			}
 		}
 		
@@ -157,7 +163,7 @@ namespace DeltaDrawing.DotDrawing
 						closestDrawing.Parent.NeedsRedrawing = true;
 					}
 				}
-				Invalidate(GetRegionToRedraw(closestDrawing.Bounds));
+				GetRegionToRedraw(closestDrawing.Bounds);
 			}
 		}
 		

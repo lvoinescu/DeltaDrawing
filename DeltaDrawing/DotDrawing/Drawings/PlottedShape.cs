@@ -89,8 +89,6 @@ namespace DeltaDrawing.DotDrawing.Drawings
 		public void Draw(Graphics graphics)
 		{
 			bounds = GetBounds();
-			//graphics.DrawLines(Pens.Black, Points.ToArray());
-			
 			Pen pen = new Pen(Color.Black, 2);
 			
 			foreach (SimpleLine line in Components) {
@@ -104,11 +102,13 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			}
 			
 			if (Selected) {
-				graphics.DrawRectangle(Pens.CadetBlue, Bounds);
+				Rectangle r = bounds;
+				r.Inflate(-3, -3);
+				graphics.DrawRectangle(new Pen(Color.Red, 1), r);
 				DrawCenter(graphics);
 			}
 			
-			NeedsRedrawing = false;
+			//NeedsRedrawing = false;
 		}
 		
 		protected void DrawCenter(Graphics graphics)
@@ -171,6 +171,8 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			
 			var rectangle = Rectangle.FromLTRB(minX, minY, maxX, maxY);
 			rectangle.Inflate(RADIUS, RADIUS);
+			if(Selected)
+				rectangle.Inflate(2, 2);
 			return rectangle;
 		}
 
