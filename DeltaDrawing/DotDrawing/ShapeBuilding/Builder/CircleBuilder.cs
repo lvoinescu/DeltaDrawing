@@ -143,7 +143,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 		public List<Point> ComputePoints(Point center, int radius)
 		{
 			List<Point> points = new List<Point>();
-			for (int angle = 0; angle < 360; angle += angleStep) {
+			for (int angle = 0; angle <= 360; angle += angleStep) {
 				Point p = new Point(center.X, center.Y);
 				var radians = (double)angle * Math.PI / 180;
 				p.Offset(-(int)(radius * Math.Cos(radians)), (int)(radius * Math.Sin(radians)));
