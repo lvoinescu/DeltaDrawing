@@ -47,14 +47,12 @@ namespace DrawingApplication
 			circleBuilder.Attach(this.dotDrawing);
 			freeBuilder.Attach(this.dotDrawing);
 			
-			lineBuilder.BuildFinished += BuildFinished;
-			circleBuilder.BuildFinished += BuildFinished;
 			snapToGridButton.Checked = snapToGrid;
 		}
 
-		void BuildFinished(object sender, ShapeBuildArgs e)
+		void RedrawRequired(object sender, ShapeBuildArgs e)
 		{
-			//dotDrawing.Drawings.Add(e.Shape);
+			 
 		}
 
 		//		public bool PreFilterMessage(ref Message m)

@@ -21,6 +21,8 @@ namespace DeltaDrawing.DotDrawing
 	public partial class DotDrawing : UserControl
 	{
 		const int HOVER_DS = 10;
+		Random r = new Random(255);
+		
 		int gridSize;
 		
 		double scale;
@@ -47,25 +49,37 @@ namespace DeltaDrawing.DotDrawing
 			gridDrawer = new GridDrawer(this, 10);
 			InitializeComponent();
 			SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw |
-			ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.UserMouse , true);
+			ControlStyles.DoubleBuffer | ControlStyles.UserPaint, true);
+		}
+
+		public void AddShape(IDrawing shape)
+		{
+			shape.RedrawRequired += shape_RedrawRequired;
+			Drawings.Add(shape);
 		}
 		
-		
-		Random r = new Random(255);
+		void shape_RedrawRequired(IDrawing sender)
+		{
+			sender.NeedsRedrawing = true;
+			Rectangle toInvalidate = GetRegionToRedraw(sender.Bounds);
+			Invalidate(toInvalidate);
+		}
 		
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
-			
+			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
 						
+			
 			int red = r.Next(255);
 			int green = r.Next(255);
 			int blue = r.Next(255);
 			
+			GetRegionToRedraw(e.ClipRectangle);
+			
 			Color color = Color.FromArgb(100, red, green, blue);
-			//e.Graphics.FillRectangle(new SolidBrush(color), e.ClipRectangle);
+//			e.Graphics.FillRectangle(new SolidBrush(color), e.ClipRectangle);
 			
 			var graphics = e.Graphics;
 			if (gridDrawer != null)
@@ -73,10 +87,10 @@ namespace DeltaDrawing.DotDrawing
 			
 			if (Drawings != null)
 				foreach (IDrawing drawing in Drawings) {
-				
-					//if (e.ClipRectangle.IntersectsWith(drawing.Bounds)) {
-					drawing.Draw(graphics);
-					//}
+					if (drawing.NeedsRedrawing) {
+						drawing.Draw(graphics);
+						drawing.NeedsRedrawing = false;
+					}
 				}
 			base.OnPaint(e);
 		}
@@ -118,29 +132,99 @@ namespace DeltaDrawing.DotDrawing
 
 		void DotDrawingMouseMove(object sender, MouseEventArgs e)
 		{
-			double minH = int.MaxValue;
-			IDrawing closestDrawing = null;
-			IDrawing previousTestedDrawing = null;
+			IDrawing closestDrawing = GetClosestDrawing(e.Location);
+			if (closestDrawing != null) {
+				UpdateHighLighted(closestDrawing);
+				Invalidate(GetRegionToRedraw(closestDrawing.Bounds));
+			}
+		}
+		
+		
+		void DotDrawingMouseDown(object sender, MouseEventArgs e)
+		{
+			IDrawing closestDrawing = GetClosestDrawing(e.Location);
+			
+			if (closestDrawing != null) {
+				foreach (var drawing in Drawings) {
+					if (closestDrawing.Parent != drawing) {
+						drawing.Selected = false;
+						drawing.NeedsRedrawing = true;
+					}
+				}
+				if (closestDrawing.Highlighted) {
+					if (closestDrawing.Parent != null) {
+						closestDrawing.Parent.Selected = true;
+						closestDrawing.Parent.NeedsRedrawing = true;
+					}
+				}
+				Invalidate(GetRegionToRedraw(closestDrawing.Bounds));
+			}
+		}
+		
+		void UpdateHighLighted(IDrawing highLightedDrawing)
+		{
 			foreach (IDrawing drawing in Drawings) {
-				
+				drawing.Highlighted = false;
 				foreach (var component in drawing.Components) {
-					component.Selected = false;
-					Rectangle testRectangle = new Rectangle(component.Bounds.Location, component.Bounds.Size);
-					testRectangle.Inflate(HOVER_DS, HOVER_DS);
-					if (testRectangle.Contains(e.Location)) {
-						double h = Geometry.Geometry.TriangleHeight(component.Points[0], component.Points[1], e.Location);
-						if (minH > h && h < HOVER_DS) {
-							minH = h;
-							closestDrawing = component;
-							previousTestedDrawing = closestDrawing;
-							closestDrawing.Selected = true;
+					if (component != highLightedDrawing) {
+						if (component.Highlighted) {
+							component.Highlighted = false;
+							drawing.Update();
 						}
 					}
 				}
-			
-				Invalidate(drawing.Bounds);
-				Parent.Text = string.Format("H={0}", minH);
+			}
+			highLightedDrawing.Highlighted = true;
+			if (highLightedDrawing.Parent != null) {
+				highLightedDrawing.Parent.Highlighted = true;
+				highLightedDrawing.Parent.Update();
 			}
 		}
+		
+		IDrawing GetClosestDrawing(Point p)
+		{
+			double minH = int.MaxValue;
+			IDrawing closestDrawing = null;
+			
+			foreach (IDrawing drawing in Drawings) {
+				foreach (var component in drawing.Components) {
+					Rectangle testRectangle = new Rectangle(component.Bounds.Location, component.Bounds.Size);
+					
+					testRectangle.Inflate(HOVER_DS, HOVER_DS);
+					if (testRectangle.Contains(p)) {
+						double h = Geometry.Geometry.TriangleHeight(component.Points[0], component.Points[1], p);
+						if (minH > h && h < HOVER_DS) {
+							minH = h;
+							closestDrawing = component;
+						}
+					}
+				}
+			}
+			
+			Parent.Text = string.Format("H={0}", minH);
+			return closestDrawing;
+		}
+		
+		Rectangle GetRegionToRedraw(Rectangle startRegion)
+		{
+			Rectangle regionToDraw = new Rectangle(startRegion.Location, startRegion.Size);
+			
+			foreach (IDrawing drawing in Drawings) {
+				
+				if (drawing.NeedsRedrawing || drawing.Bounds.IntersectsWith(regionToDraw)) {
+					drawing.NeedsRedrawing = true;
+					regionToDraw = Rectangle.Union(regionToDraw, drawing.Bounds);
+					
+					foreach (IDrawing d in Drawings) {
+						if (d.Bounds.IntersectsWith(regionToDraw)) {
+							d.NeedsRedrawing = true;
+							regionToDraw = Rectangle.Union(regionToDraw, d.Bounds);
+						}
+					}
+				}
+			}
+			return regionToDraw;
+		}
+		
 	}
 }

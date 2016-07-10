@@ -70,9 +70,9 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 					clickCount++;
 					break;
 				case State.STARTED:
-					if(clickCount == 1) {
+					if (clickCount == 1) {
 						clickCount = 0;
-						state =  State.NOT_INITIALIZED;
+						state = State.NOT_INITIALIZED;
 						Active = false;
 					}
 					break;
@@ -112,7 +112,6 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 					
 					Rectangle rect = Rectangle.FromLTRB(leftTopPoint.X, leftTopPoint.Y, rightBottomPoint.X, rightBottomPoint.Y);
 					updatePoints(center, radius);
-					dotDrawing.Invalidate(rect);
 				}
 			}
 		}
@@ -121,11 +120,12 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 		{
 			shape.Points = ComputePoints(c, r);
 			shape.Components = ConnectDots(shape.Points);
+			shape.Update();
 		}
 		
 		void MouseWheel(object sender, MouseEventArgs e)
 		{
-			if(!Active)
+			if (!Active)
 				return;
 			var deltaAngle = e.Delta * SystemInformation.MouseWheelScrollLines / 120;
 			angleStep += deltaAngle;
@@ -138,9 +138,6 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			
 			updatePoints(center, radius);
 			
-			Rectangle rect = Rectangle.FromLTRB(center.X - radius, center.Y - radius, center.X + radius, center.Y + radius);
-			rect.Inflate(10, 10);
-			dotDrawing.Invalidate(rect);
 		}
 		
 		public List<Point> ComputePoints(Point center, int radius)
@@ -160,12 +157,19 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 		{
 			List<SimpleLine> lines = new List<SimpleLine>();
 			for (int i = 0; i < points.Count - 1; i++) {
-				lines.Add(new SimpleLine(points[i], points[i + 1]));
+				var simpleLine = new SimpleLine(points[i], points[i + 1]);
+				simpleLine.Parent = shape;
+				simpleLine.NeedsRedrawing = true;
+				lines.Add(simpleLine);
 			}
 			
 			if (points.Count > 1) {
-				lines.Add(new SimpleLine(points[points.Count - 1], points[0]));
+				var simpleLine = new SimpleLine(points[points.Count - 1], points[0]);
+				simpleLine.Parent = shape;
+				simpleLine.NeedsRedrawing = true;
+				lines.Add(simpleLine);
 			}
+			
 			return lines;
 		}
 			

@@ -29,7 +29,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 	public class FreeBuilder : AbstractBuilder
 	{
 		const int DEFAULT_CAPACITY = 100;
-		bool paint = false;
+		bool paint;
 		
 
 		public override void Attach(DotDrawing dotDrawing)
@@ -48,17 +48,19 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			Point p;
 			switch (state) {
 				case State.NOT_INITIALIZED:
+					shape = new PlottedShape();
+					dotDrawing.AddShape(shape);
 					shape.Points = new List<Point>(DEFAULT_CAPACITY);
 					shape.Components = new List<SimpleLine>(DEFAULT_CAPACITY + 1);
+					
 					if (snapToGrid) {
 						int gridSize = dotDrawing.GridSize;
 						p = new Point((int)e.Location.X / gridSize * gridSize, (int)e.Location.Y / gridSize * gridSize);
 					} else
 						p = e.Location;
+					
 					shape.AddPoint(p);
 					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 1], p));
-					Region region = new Region(shape.Bounds);
-					dotDrawing.Invalidate(region);
 					state = State.STARTED;
 					break;
 				case State.STARTED:
@@ -77,19 +79,11 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			if (state == State.NOT_INITIALIZED)
 				return;
 			
-			if (shape.Points.Count > 0) {
-				Region invalidatedRegion = new Region(shape.Bounds);
-				dotDrawing.Invalidate(invalidatedRegion);
-				shape = new PlottedShape();
-				dotDrawing.Drawings.Add(shape);
-			}
-			
 			state = State.NOT_INITIALIZED;
 		}
 
 		void MouseMove(object sender, MouseEventArgs e)
 		{
-
 			if (state == State.NOT_INITIALIZED)
 				return;
 			
@@ -97,6 +91,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				return;
 			
 			Point newPoint;
+			
 			if (snapToGrid) {
 				int gridSize = dotDrawing.GridSize;
 				newPoint = new Point((int)e.Location.X / gridSize * gridSize, (int)e.Location.Y / gridSize * gridSize);
@@ -106,13 +101,13 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				
 			if (shape.Points.Count > 1) {
 				Point lastPoint = shape.Points[shape.Points.Count - 1];
-				shape.Components.Add(new SimpleLine(lastPoint, newPoint));
-			
+				var simpleLine = new SimpleLine(lastPoint, newPoint);
+				simpleLine.Parent = shape;
+				shape.Components.Add(simpleLine);
 			}
 				
 			shape.Points.Add(newPoint);
-			dotDrawing.Invalidate(shape.Bounds);
-
+			shape.Update();
 		}
 		
 		

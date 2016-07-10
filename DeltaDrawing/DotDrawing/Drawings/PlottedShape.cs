@@ -25,12 +25,26 @@ namespace DeltaDrawing.DotDrawing.Drawings
 {
 	public class PlottedShape : IDrawing
 	{
+		public event RedrawRequiredHandler RedrawRequired;
+
 		const int RADIUS = 5;
+		IDrawing parent;
 
 		Rectangle bounds;
 		List<SimpleLine> simpleLines;
 		
 		public List<Point> Points {
+			get;
+			set;
+		}
+
+		public IDrawing Parent {
+			get {
+				return parent;
+			}
+		}
+
+		public bool NeedsRedrawing {
 			get;
 			set;
 		}
@@ -53,7 +67,9 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			}
 			
 			for (int i = 0; i < Points.Count - 2; i++) {
-				Components.Add(new SimpleLine(Points[i], Points[i + 1]));
+				var simpleLine = new SimpleLine(Points[i], Points[i + 1]);
+				simpleLine.Parent = this;
+				Components.Add(simpleLine);
 			}
 			bounds = GetBounds();
 		}
@@ -84,6 +100,12 @@ namespace DeltaDrawing.DotDrawing.Drawings
 				center.Offset(-RADIUS / 2, -RADIUS / 2);
 				graphics.DrawEllipse(Pens.Blue, new RectangleF(center, new Size(RADIUS, RADIUS)));
 			}
+			
+			if (Selected) {
+				graphics.DrawRectangle(Pens.CadetBlue, Bounds);
+			}
+			
+			NeedsRedrawing = false;
 		}
 
 		public List<SimpleLine> Components {
@@ -95,11 +117,16 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			}
 		}
 
-		public bool Selected {
+		public bool Highlighted {
 			get;
 			set;
 		}
 
+		public bool Selected {
+			get;
+			set;
+		}
+		
 		public Rectangle Bounds {
 			get {
 				return bounds;
@@ -138,5 +165,12 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			return rectangle;
 		}
 
+		public void Update()
+		{
+			NeedsRedrawing = true;
+			if(parent!= null)
+				parent.NeedsRedrawing = true;
+			RedrawRequired(this);
+		}
 	}
 }

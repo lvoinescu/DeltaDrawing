@@ -28,8 +28,6 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 	public class LineBuilder : AbstractBuilder
 	{
 		
-		
-
 
 		public override void Attach(DotDrawing dotDrawing)
 		{
@@ -47,6 +45,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			Point p;
 			switch (state) {
 				case State.NOT_INITIALIZED:
+					dotDrawing.AddShape(shape);
 					shape.Points = new List<Point>();
 					
 					p = e.Location;
@@ -58,23 +57,29 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 					
 					shape.AddPoint(p);
 					shape.AddPoint(p);
+					var simpleLine = new SimpleLine(p, p);
+					simpleLine.Parent = shape;
+					shape.Components.Add(simpleLine);
 					state = State.STARTED;
 					break;
 				case State.STARTED:
-					
 					if (snapToGrid) {
 						int gridSize = dotDrawing.GridSize;
 						p = new Point((int)e.Location.X / gridSize * gridSize, (int)e.Location.Y / gridSize * gridSize);
 					} else
 						p = e.Location;
+					
 					shape.AddPoint(p);
-					shape.Components.Add(new SimpleLine(shape.Points[shape.Points.Count - 1], p));
-					dotDrawing.Invalidate(new Region(shape.Bounds));
+					
+					var firstLine = new SimpleLine(shape.Points[shape.Points.Count - 1], p);
+					firstLine.Parent = shape;
+					shape.Components.Add(firstLine);
 					break;
 				case State.ENDED:
 
 					break;
 			}
+			shape.Update();
 		}
 
 
@@ -89,7 +94,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			
 			if (shape.Points.Count > 1) {
 				Point lastPoint = shape.Points[shape.Points.Count - 1];
-				Point penultimatePoint = shape.Points[shape.Points.Count - 2];
+				Point beforeLastPoint = shape.Points[shape.Points.Count - 2];
 				
 				if (snapToGrid) {
 					int gridSize = dotDrawing.GridSize;
@@ -101,9 +106,9 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 					shape.Points[shape.Points.Count - 1] = e.Location;
 					shape.Components[shape.Components.Count - 1].P2 = e.Location;
 				}
-			
-				dotDrawing.Invalidate(shape.Bounds);
 				
+				shape.Components[shape.Components.Count - 1].Update();
+				shape.Update();
 			}
 		}
 
@@ -114,7 +119,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				Active = false;
 				if (shape.Points.Count > 0) {
 					shape.Points.RemoveAt(shape.Points.Count - 1);
-					shape.Components.RemoveAt(shape.Components.Count - 1);
+					shape.Update();
 				}
 				state = State.NOT_INITIALIZED;
 			}

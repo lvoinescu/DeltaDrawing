@@ -26,8 +26,11 @@ namespace DeltaDrawing.DotDrawing.Drawings
 
 	public class SimpleLine : IDrawing
 	{
-		Point p1, p2;
+		public event RedrawRequiredHandler RedrawRequired;
 
+		Point p1, p2;
+		IDrawing parent;
+		
 		public Point P1 {
 			get {
 				return p1;
@@ -46,6 +49,11 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			}
 		}
 
+		public bool NeedsRedrawing {
+			get;
+			set;
+		}
+		
 		public SimpleLine(Point p1, Point p2)
 		{
 			this.p1 = p1;
@@ -55,13 +63,14 @@ namespace DeltaDrawing.DotDrawing.Drawings
 		public void Draw(Graphics graphics)
 		{
 			
-			if (Selected) {
+			if (Highlighted) {
 				Pen pen1 = new Pen(Color.Green, 2);
 				graphics.DrawLine(pen1, p1, p2);
 			} else {
 				Pen pen2 = new Pen(Color.Black, 2);
 				graphics.DrawLine(Pens.Black, p1, p2);
 			}
+			NeedsRedrawing = false;
 		}
 
 		public List<SimpleLine> Components {
@@ -70,11 +79,25 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			}
 		}
 
-		public bool Selected {
+		public IDrawing Parent {
+			get {
+				return parent;
+			}
+			set {
+				parent = value;
+			}
+		}
+		
+		public bool Highlighted {
 			get;
 			set;
 		}
 
+		public bool Selected {
+			get;
+			set;
+		}
+		
 		public Rectangle Bounds {
 			get {
 				return Rectangle.FromLTRB(p1.X < p2.X ? p1.X : p2.X, p1.Y < p2.Y ? p1.Y : p2.Y,
@@ -96,5 +119,12 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			return string.Format("[SimpleLine P1={0}, P2={1}]", p1, p2);
 		}
 
+		public void Update()
+		{
+			NeedsRedrawing = true;
+			if (RedrawRequired != null) {
+				RedrawRequired(this);
+			}
+		}
 	}
 }

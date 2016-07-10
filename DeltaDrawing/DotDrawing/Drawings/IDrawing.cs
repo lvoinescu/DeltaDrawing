@@ -12,12 +12,23 @@ using System.Drawing;
 
 namespace DeltaDrawing.DotDrawing.Drawings
 {
+	public delegate void RedrawRequiredHandler(IDrawing sender);
+	
+	
 	public interface IDrawing
 	{
+		event RedrawRequiredHandler RedrawRequired;
+		
+		
 		List<SimpleLine> Components { get; }
+		bool Highlighted { get; set; }
 		bool Selected { get; set; }
+		bool NeedsRedrawing { get; set; }
 		void Draw(Graphics graphics);
 		Rectangle Bounds { get; }
-		List<Point> Points {get; set;}
+		List<Point> Points { get; set; }
+		IDrawing Parent{ get; }
+		
+		void Update();
 	}
 }

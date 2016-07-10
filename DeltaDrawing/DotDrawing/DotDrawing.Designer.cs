@@ -45,6 +45,7 @@ namespace DeltaDrawing.DotDrawing
 			this.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.Name = "DotDrawing";
 			this.Size = new System.Drawing.Size(646, 380);
+			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DotDrawingMouseDown);
 			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DotDrawingMouseMove);
 			this.ResumeLayout(false);
 
