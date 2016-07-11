@@ -32,7 +32,8 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding.Transformation
 		public int Angle { get; set; }
 		public Point Center { get; set; }
 		
-		public Rotation(Point center, int angle) {
+		public Rotation(Point center, int angle)
+		{
 			this.Center = center;
 			this.Angle = angle;
 		}
@@ -58,12 +59,12 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding.Transformation
 			p.Offset(-center.X, -center.Y);
 			
 			// rotate point
-			double xnew = p.X * c - p.Y * s;
-			double ynew = p.X * s + p.Y * c;
+			double xnew = c * p.X - s * p.Y;
+			double ynew = s * p.X + c * p.Y;
 			
 			// translate point back:
-			p.X = (int)(xnew + center.X);
-			p.Y = (int)(ynew + center.Y);
+			p.X = (int)Math.Round(xnew + center.X);
+			p.Y = (int)Math.Round(ynew + center.Y);
 			return p;
 		}
 		

@@ -27,7 +27,7 @@ namespace DeltaDrawing.DotDrawing.Drawings
 	{
 		public event RedrawRequiredHandler RedrawRequired;
 
-		const int RADIUS = 5;
+		const int RADIUS = 6;
 		const int CROSS_SIZE = 4;
 		
 		IDrawing parent;

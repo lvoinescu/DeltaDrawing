@@ -31,10 +31,15 @@ namespace DeltaDrawing.DotDrawing.Actions
 	/// </summary>
 	public class RotateAction
 	{
+		
+		const int ANGLE_STEP = 10;
 		const int CENTER_PAD = 6;
+		
 		readonly DotDrawing dotDrawing;
-		Point initialLocation;
 		IDrawing selectedDrawing;
+		List<Point> pointsToRotate;
+		int angle;
+		
 		
 		public bool Activated { get; set; }
 		
@@ -44,6 +49,7 @@ namespace DeltaDrawing.DotDrawing.Actions
 			dotDrawing.MouseDown += dotDrawing_MouseDown;
 			dotDrawing.MouseMove += dotDrawing_MouseMove;
 			dotDrawing.MouseUp += dotDrawing_MouseUp;
+			dotDrawing.MouseWheel += dotDrawing_MouseWheel;
 		}
 
 		void dotDrawing_MouseDown(object sender, MouseEventArgs e)
@@ -51,26 +57,22 @@ namespace DeltaDrawing.DotDrawing.Actions
 			selectedDrawing = CheckStart(e.Location);
 			if (selectedDrawing != null) {
 				Activated = true;
-				initialLocation = e.Location;
+				pointsToRotate = selectedDrawing.Points;
 			}
 			
 		}
 
-		void dotDrawing_MouseMove(object sender, MouseEventArgs e)
+		void dotDrawing_MouseWheel(object sender, MouseEventArgs e)
 		{
 			if (!Activated)
 				return;
 			
-
-			int angle = (int)Geometry.Geometry.Angle3Points(selectedDrawing.Center, initialLocation, e.Location);
+			var delta = e.Delta * SystemInformation.MouseWheelScrollLines / 120;
 			
-			if(Math.Pow(initialLocation.X, 2) + Math.Pow(initialLocation.Y, 2) >
-				Math.Pow(e.Location.X, 2) + Math.Pow(e.Location.Y, 2)) {
-				angle = -angle;
-			}
+			angle += delta;
 			
-			ITransformation transformation = new Rotation(selectedDrawing.Center, angle);
-			List<Point> newPoints = transformation.Transform(selectedDrawing.Points);
+			ITransformation transformation = new Rotation(e.Location, angle);
+			List<Point> newPoints = transformation.Transform(pointsToRotate);
 			
 			List<SimpleLine> lines = new LineConnection(newPoints).Lines();
 			
@@ -78,6 +80,12 @@ namespace DeltaDrawing.DotDrawing.Actions
 			selectedDrawing.Components = lines;
 			
 			selectedDrawing.Update();
+		}
+		
+		void dotDrawing_MouseMove(object sender, MouseEventArgs e)
+		{
+			if(!Activated)
+				return;
 
 		}
 
@@ -89,19 +97,8 @@ namespace DeltaDrawing.DotDrawing.Actions
 		IDrawing CheckStart(Point p)
 		{
 			foreach (var drawing in dotDrawing.Drawings) {
-
-				Point topRightCorner = new Point(drawing.Bounds.Left + drawing.Bounds.Width,
-					                       drawing.Bounds.Top);
-				initialLocation = p;
-				
-				Point c1 = topRightCorner;
-				Point c2 = topRightCorner;
-				c1.Offset(-CENTER_PAD, -CENTER_PAD);
-				c2.Offset(CENTER_PAD, CENTER_PAD);
-				
-				Rectangle r = Rectangle.FromLTRB(c1.X, c1.Y, c2.X, c2.Y);
-				
-				if (drawing.Selected && r.Contains(p)) {
+			
+				if (drawing.Selected && drawing.Bounds.Contains(p)) {
 					return drawing;
 				}
 			}
