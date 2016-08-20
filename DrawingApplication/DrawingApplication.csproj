@@ -58,6 +58,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dot.Writers\AsyncDeltaPointsWriter.cs" />
+    <Compile Include="Dot.Writers\IDeltaPointsWriter.cs" />
+    <Compile Include="Dot.Writers\Serial\SerialPointsWriter.cs" />
+    <Compile Include="Dot.Writers\Serial\SerialProtocol.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -80,6 +84,10 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dot.Writers" />
+    <Folder Include="Dot.Writers\Serial" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
