@@ -50,9 +50,6 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -69,6 +66,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeltaOut\Dot.Writers\AsyncDeltaPointsWriter.cs" />
+    <Compile Include="DeltaOut\Dot.Writers\IDeltaPointsWriter.cs" />
+    <Compile Include="DeltaOut\Dot.Writers\Serial\ConsolePointWriter.cs" />
+    <Compile Include="DeltaOut\Dot.Writers\Serial\SerialPointsWriter.cs" />
+    <Compile Include="DeltaOut\Dot.Writers\Serial\SerialProtocol.cs" />
     <Compile Include="DotDrawing\Actions\Action.cs" />
     <Compile Include="DotDrawing\Actions\ActionManager.cs" />
     <Compile Include="DotDrawing\Actions\RotateAction.cs" />
@@ -101,6 +103,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DeltaOut\Dot.Writers" />
+    <Folder Include="DeltaOut\Dot.Writers\Serial" />
     <Folder Include="DotDrawing" />
     <Folder Include="DotDrawing\Drawings" />
     <Folder Include="DotDrawing\Geometry" />
@@ -108,9 +112,7 @@
     <Folder Include="DotDrawing\ShapeBuilding" />
     <Folder Include="DotDrawing\ShapeBuilding\Builder" />
     <Folder Include="DotDrawing\ShapeBuilding\Transformation" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="DeltaOut" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

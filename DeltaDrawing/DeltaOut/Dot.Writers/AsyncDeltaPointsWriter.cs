@@ -23,7 +23,7 @@ using System.Collections.Concurrent;
 using System.Drawing;
 using System.Threading;
 
-namespace Dot.Writers
+namespace DeltaDrawing.DeltaOut.Dot.Writers
 {
 
 	public class AsyncDeltaPointsWriter: IDeltaPointsWriter
@@ -33,7 +33,7 @@ namespace Dot.Writers
 		Thread writingThread;
 		volatile bool listening;
 		readonly object syncLock = new object();
-		ConcurrentQueue<List<Point>> pointsQueue = new ConcurrentQueue<List<Point>>();
+		ConcurrentQueue<IList<Point>> pointsQueue = new ConcurrentQueue<IList<Point>>();
 		
 		IDeltaPointsWriter pointWriter;
 		
@@ -55,23 +55,30 @@ namespace Dot.Writers
 			pointWriter.Open();
 			
 			while (listening) {
-				List<Point> points;
+				IList<Point> points = null;
 				
 				lock (syncLock) {
+					
 					if (pointsQueue.Count > 0) {
-						if (pointsQueue.TryDequeue(out points)) {
-							pointWriter.WritePoints(points);
-						}
+						pointsQueue.TryDequeue(out points);
+							
 					} else {
 						Monitor.Wait(syncLock);
 					}
+				}
+				if (points != null && points.Count > 0) {
+					pointWriter.WritePoints(points);
 				}
 			}
 		}
 		
 		
-		public void WritePoints(List<Point> points)
+		public void WritePoints(IList<Point> points)
 		{
+			if(!listening) {
+				throw new InvalidOperationException("Writer needs to be open fisrt!");
+			}
+			
 			lock (syncLock) {
 				pointsQueue.Enqueue(points);
 				Monitor.Pulse(syncLock);
@@ -86,6 +93,7 @@ namespace Dot.Writers
 		public void Close()
 		{
 			listening = false;
+			pointWriter.Close();
 		}
 	}
 }

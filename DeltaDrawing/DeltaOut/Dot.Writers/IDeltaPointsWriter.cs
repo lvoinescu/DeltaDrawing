@@ -20,54 +20,18 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO.Ports;
-using Dot.Writers;
 
-namespace DrawingApplication.Dot.Writers.Serial
+namespace DeltaDrawing.DeltaOut.Dot.Writers
 {
 	/// <summary>
-	/// Description of SerialPointsWriter.
+	/// Description of SerialDotWriter.
 	/// </summary>
-	public class SerialPointsWriter : IDeltaPointsWriter
+	public interface IDeltaPointsWriter
 	{
-		const String START_LINE ="S";
-		readonly SerialPort serialPort;
+		void Open();
 		
-		public SerialPointsWriter(SerialPort serialPort)
-		{
-			this.serialPort = serialPort;
-		}
-
-		public void Open()
-		{
-			if (!serialPort.IsOpen) {
-				serialPort.Open();
-			}
-		}
-
-		public void WritePoints(List<Point> points)
-		{
-			serialPort.Write(START_LINE);
-			points.ForEach(p => serialPort.Write(PointToBytes(p), 0, 4));
-		}
-
-		public void Close()
-		{
-			serialPort.Close();
-		}
-
+		void WritePoints(IList<Point> points);
 		
-		private static byte[] PointToBytes(Point point)
-		{
-			byte[] output = new byte[4];
-			byte[] xBytes = BitConverter.GetBytes((ushort)point.X);
-			byte[] yBytes = BitConverter.GetBytes((ushort)point.Y);
-			
-			xBytes.CopyTo(output, 0);
-			yBytes.CopyTo(output, 2);
-			
-			return output;
-		}
-		
+		void Close();
 	}
 }

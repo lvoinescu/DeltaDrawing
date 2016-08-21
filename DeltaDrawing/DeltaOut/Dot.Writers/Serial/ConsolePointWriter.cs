@@ -18,21 +18,44 @@
  *   along with SamDiagrams. If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
-namespace DrawingApplication.Dot.Writers.Serial
+namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 {
 	/// <summary>
-	/// Description of SerialProtocol.
+	/// Description of ConsolePointWriter.
 	/// </summary>
-	public class SerialProtocol
+	public class ConsolePointWriter : IDeltaPointsWriter
 	{
-		public SerialProtocol()
+		byte[] START_LINE = System.Text.Encoding.ASCII.GetBytes("SL");
+		byte[] END_LINE = System.Text.Encoding.ASCII.GetBytes("EL");
+		
+		public ConsolePointWriter()
 		{
 		}
+
+		public void Open()
+		{
+			Console.WriteLine("Console writer opened.");
+		}
+
+		public void WritePoints(IList<Point> points)
+		{
+			Console.Write(System.Text.Encoding.ASCII.GetChars(START_LINE, 0, 2));
+			Console.Write(System.Text.Encoding.ASCII.GetChars(BitConverter.GetBytes((ushort)points.Count)));
+			foreach (var point in points) {
+				Console.Write(System.Text.Encoding.ASCII.GetChars(PointToBytes(point)), 0, 4);
+			} 
+			Console.WriteLine(System.Text.Encoding.ASCII.GetChars(END_LINE, 0, 2));
+		}
+
+		public void Close()
+		{
+			Console.WriteLine("Console writer closed.");
+		}
 		
-		
-		public static byte[] PointToBytes(Point point)
+		static byte[] PointToBytes(Point point)
 		{
 			byte[] output = new byte[4];
 			byte[] xBytes = BitConverter.GetBytes((ushort)point.X);
@@ -43,5 +66,6 @@ namespace DrawingApplication.Dot.Writers.Serial
 			
 			return output;
 		}
+		
 	}
 }

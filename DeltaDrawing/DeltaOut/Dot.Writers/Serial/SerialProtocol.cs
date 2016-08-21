@@ -18,20 +18,30 @@
  *   along with SamDiagrams. If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 
-namespace Dot.Writers
+namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 {
 	/// <summary>
-	/// Description of SerialDotWriter.
+	/// Description of SerialProtocol.
 	/// </summary>
-	public interface IDeltaPointsWriter
+	public class SerialProtocol
 	{
-		void Open();
+		public SerialProtocol()
+		{
+		}
 		
-		void WritePoints(List<Point> points);
 		
-		void Close();
+		public static byte[] PointToBytes(Point point)
+		{
+			byte[] output = new byte[4];
+			byte[] xBytes = BitConverter.GetBytes((ushort)point.X);
+			byte[] yBytes = BitConverter.GetBytes((ushort)point.Y);
+			
+			xBytes.CopyTo(output, 0);
+			yBytes.CopyTo(output, 2);
+			
+			return output;
+		}
 	}
 }
