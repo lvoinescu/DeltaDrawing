@@ -33,6 +33,8 @@ namespace DrawingApplication
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton snapToGridButton;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -60,10 +62,12 @@ namespace DrawingApplication
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.snapToGridButton = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -90,7 +94,9 @@ namespace DrawingApplication
 			this.toolStripSeparator2,
 			this.toolStripButton3,
 			this.toolStripSeparator1,
-			this.snapToGridButton});
+			this.snapToGridButton,
+			this.toolStripSeparator3,
+			this.toolStripComboBox1});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(902, 25);
@@ -116,6 +122,11 @@ namespace DrawingApplication
 			this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton2.Text = "Circle tool";
 			this.toolStripButton2.Click += new System.EventHandler(this.ToolStripButton2Click);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolStripButton3
 			// 
@@ -146,10 +157,15 @@ namespace DrawingApplication
 			this.snapToGridButton.Text = "Snap to grid";
 			this.snapToGridButton.Click += new System.EventHandler(this.ToolStripButton4Click);
 			// 
-			// toolStripSeparator2
+			// toolStripSeparator3
 			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolStripComboBox1
+			// 
+			this.toolStripComboBox1.Name = "toolStripComboBox1";
+			this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
 			// 
 			// MainForm
 			// 
