@@ -116,6 +116,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 		void KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Escape) {
+				OnBuildFinished();
 				Active = false;
 				if (shape.Points.Count > 0) {
 					shape.Points.RemoveAt(shape.Points.Count - 1);

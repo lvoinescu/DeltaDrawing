@@ -79,7 +79,10 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 		}
 
 		public bool Active { get ; set; }
-		
-		
+
+		public void OnBuildFinished(){
+			PlottedShape shape = new PlottedShape(this.shape.Points);
+			BuildFinished(this, new ShapeBuildArgs(shape));
+		}
 	}
 }

@@ -18,7 +18,10 @@
  *   along with SamDiagrams. If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
+using System.IO.Ports;
 using System.Windows.Forms;
+using DeltaDrawing.DeltaOut.Dot.Writers;
+using DeltaDrawing.DeltaOut.Dot.Writers.Serial;
 using DeltaDrawing.DotDrawing.ShapeBuilding;
 
 namespace DrawingApplication
@@ -37,7 +40,11 @@ namespace DrawingApplication
 		AbstractBuilder freeBuilder = new FreeBuilder();
 		AbstractBuilder activeBuilder;
 		
-		private bool snapToGrid = false;
+		
+		
+		bool snapToGrid = false;
+		
+		IDeltaPointsWriter asyncSerialWriter;
 		public MainForm()
 		{
  
@@ -47,9 +54,21 @@ namespace DrawingApplication
 			circleBuilder.Attach(this.dotDrawing);
 			freeBuilder.Attach(this.dotDrawing);
 			
+			
+			lineBuilder.BuildFinished += lineBuilder_BuildFinished;
+			circleBuilder.BuildFinished += lineBuilder_BuildFinished;
+			freeBuilder.BuildFinished += lineBuilder_BuildFinished;
+			
 			snapToGridButton.Checked = snapToGrid;
+			
 		}
 
+		void lineBuilder_BuildFinished(object sender, ShapeBuildArgs e)
+		{
+			if (asyncSerialWriter != null) {
+				asyncSerialWriter.WritePoints(e.Shape.Points);
+			}
+		}
 		void RedrawRequired(object sender, ShapeBuildArgs e)
 		{
 			 
@@ -147,6 +166,7 @@ namespace DrawingApplication
 				freeBuilder.Active = false;
 			}
 		}
+		
 		void ToolStripButton4Click(object sender, EventArgs e)
 		{
 			snapToGrid = snapToGridButton.Checked;
@@ -154,12 +174,14 @@ namespace DrawingApplication
 				activeBuilder.SnapToGrid = snapToGrid;
 			}
 		}
+		
 		void DotDrawingKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.G) {
 				updateSnap(true);
 			}
 		}
+		
 		void DotDrawingKeyUp(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.G) {
@@ -167,7 +189,7 @@ namespace DrawingApplication
 			}
 		}
 		
-		private void updateSnap(bool snap)
+		void updateSnap(bool snap)
 		{
 			snapToGrid = snap;
 			snapToGridButton.Checked = snap;
@@ -176,5 +198,39 @@ namespace DrawingApplication
 			}
 		}
 		
+		
+		void openSerialWriter(object sender, EventArgs e)
+		{
+			initSerialWriter();
+		}
+		
+		void initSerialWriter()
+		{
+			if (asyncSerialWriter == null) {
+				
+				SerialPort serialPort = new SerialPort(serialPortSelector.Text, 
+					                        int.Parse(baudRateSelector.Text));
+				asyncSerialWriter = new AsyncDeltaPointsWriter(new SerialPointsWriter(serialPort));
+			} else {
+				asyncSerialWriter.Close();
+			}
+			
+			asyncSerialWriter.Open();
+		}
+		
+		void ToolStripButton5Click(object sender, EventArgs e)
+		{
+			if (asyncSerialWriter != null) {
+				asyncSerialWriter.Close();
+			}
+		}
+		
+		void ToolStripButton6Click(object sender, EventArgs e)
+		{
+			initSerialWriter();
+			foreach (var drawing in dotDrawing.Drawings) {
+				asyncSerialWriter.WritePoints(drawing.Points);
+			}
+		}
 	}
 }

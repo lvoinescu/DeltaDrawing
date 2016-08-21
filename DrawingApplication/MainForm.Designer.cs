@@ -34,7 +34,13 @@ namespace DrawingApplication
 		private System.Windows.Forms.ToolStripButton snapToGridButton;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-		private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
+		private System.Windows.Forms.ToolStripComboBox serialPortSelector;
+		private System.Windows.Forms.ToolStripButton toolStripButton4;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+		private System.Windows.Forms.ToolStripComboBox baudRateSelector;
+		private System.Windows.Forms.ToolStripButton toolStripButton5;
+		private System.Windows.Forms.ToolStripButton toolStripButton6;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -67,7 +73,13 @@ namespace DrawingApplication
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.snapToGridButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+			this.serialPortSelector = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+			this.baudRateSelector = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -96,7 +108,13 @@ namespace DrawingApplication
 			this.toolStripSeparator1,
 			this.snapToGridButton,
 			this.toolStripSeparator3,
-			this.toolStripComboBox1});
+			this.toolStripLabel2,
+			this.serialPortSelector,
+			this.toolStripLabel1,
+			this.baudRateSelector,
+			this.toolStripButton4,
+			this.toolStripButton5,
+			this.toolStripButton6});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(902, 25);
@@ -162,10 +180,64 @@ namespace DrawingApplication
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
 			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
 			// 
-			// toolStripComboBox1
+			// toolStripLabel2
 			// 
-			this.toolStripComboBox1.Name = "toolStripComboBox1";
-			this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
+			this.toolStripLabel2.Name = "toolStripLabel2";
+			this.toolStripLabel2.Size = new System.Drawing.Size(53, 22);
+			this.toolStripLabel2.Text = "COM port";
+			// 
+			// serialPortSelector
+			// 
+			this.serialPortSelector.Name = "serialPortSelector";
+			this.serialPortSelector.Size = new System.Drawing.Size(121, 25);
+			this.serialPortSelector.Text = "COM1";
+			// 
+			// toolStripLabel1
+			// 
+			this.toolStripLabel1.Name = "toolStripLabel1";
+			this.toolStripLabel1.Size = new System.Drawing.Size(54, 22);
+			this.toolStripLabel1.Text = "Baud rate";
+			// 
+			// baudRateSelector
+			// 
+			this.baudRateSelector.Items.AddRange(new object[] {
+			"9800",
+			"19200",
+			"38400",
+			"11520"});
+			this.baudRateSelector.Name = "baudRateSelector";
+			this.baudRateSelector.Size = new System.Drawing.Size(121, 25);
+			this.baudRateSelector.Text = "9600";
+			// 
+			// toolStripButton4
+			// 
+			this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
+			this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton4.Name = "toolStripButton4";
+			this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton4.Text = "Open serial port";
+			this.toolStripButton4.Click += new System.EventHandler(this.openSerialWriter);
+			// 
+			// toolStripButton5
+			// 
+			this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+			this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton5.Name = "toolStripButton5";
+			this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton5.Text = "Close serial port";
+			this.toolStripButton5.Click += new System.EventHandler(this.ToolStripButton5Click);
+			// 
+			// toolStripButton6
+			// 
+			this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
+			this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton6.Name = "toolStripButton6";
+			this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton6.Text = "Draw all to serial port";
+			this.toolStripButton6.Click += new System.EventHandler(this.ToolStripButton6Click);
 			// 
 			// MainForm
 			// 

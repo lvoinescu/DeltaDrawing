@@ -80,6 +80,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			if (state == State.NOT_INITIALIZED)
 				return;
 			
+			OnBuildFinished();
 			if (shape.Points.Count < 2) {
 				shape.Points.Clear();
 				shape.Components.Clear();

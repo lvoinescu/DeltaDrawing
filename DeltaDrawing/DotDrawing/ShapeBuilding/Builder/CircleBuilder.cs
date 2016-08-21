@@ -74,6 +74,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 						clickCount = 0;
 						state = State.NOT_INITIALIZED;
 						Active = false;
+						OnBuildFinished();
 					}
 					break;
 				case State.ENDED:
