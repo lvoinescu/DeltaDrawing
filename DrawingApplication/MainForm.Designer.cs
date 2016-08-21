@@ -200,13 +200,14 @@ namespace DrawingApplication
 			// 
 			// baudRateSelector
 			// 
+			this.baudRateSelector.DropDownWidth = 40;
 			this.baudRateSelector.Items.AddRange(new object[] {
 			"9800",
 			"19200",
 			"38400",
 			"11520"});
 			this.baudRateSelector.Name = "baudRateSelector";
-			this.baudRateSelector.Size = new System.Drawing.Size(121, 25);
+			this.baudRateSelector.Size = new System.Drawing.Size(75, 25);
 			this.baudRateSelector.Text = "9600";
 			// 
 			// toolStripButton4
