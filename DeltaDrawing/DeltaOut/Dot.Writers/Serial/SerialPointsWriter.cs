@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Ports;
+using System.Threading;
 
 namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 {
@@ -36,12 +37,16 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 		public SerialPointsWriter(SerialPort serialPort)
 		{
 			this.serialPort = serialPort;
+
 		}
+
 
 		public void Open()
 		{
 			if (!serialPort.IsOpen) {
 				serialPort.Open();
+				Thread readThread = new Thread (new ThreadStart (ReadThread));
+				readThread.Start();
 			}
 		}
 
@@ -55,11 +60,27 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 			serialPort.WriteLine(System.Text.Encoding.ASCII.GetString(END_LINE, 0, 2));
 		}
 
+
 		public void Close()
 		{
 			serialPort.Close();
 		}
 
+
+		private void ReadThread()
+		{
+
+			while(true)
+			{
+				Thread.Sleep(200);
+				if(serialPort.BytesToRead > 0)
+				{
+					byte[] buffer = new byte[10];
+					serialPort.Read (buffer, 0, 2);
+					Console.WriteLine (buffer);
+				}
+			}
+		}
 		
 		private static byte[] PointToBytes(Point point)
 		{
