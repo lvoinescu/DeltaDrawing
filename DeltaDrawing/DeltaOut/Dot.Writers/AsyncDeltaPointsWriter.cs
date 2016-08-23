@@ -33,9 +33,10 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 		Thread writingThread;
 		volatile bool listening;
 		readonly object syncLock = new object();
+		readonly IDeltaPointsWriter pointWriter;
+		
 		ConcurrentQueue<IList<Point>> pointsQueue = new ConcurrentQueue<IList<Point>>();
 		
-		IDeltaPointsWriter pointWriter;
 		
 		public AsyncDeltaPointsWriter(IDeltaPointsWriter pointWriter)
 		{
@@ -67,15 +68,28 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 					}
 				}
 				if (points != null && points.Count > 0) {
-					pointWriter.WritePoints(points);
+					pointWriter.WriteLine(points);
+				}
+				
+				//wait for the OK response
+				String responseStatus = new string(pointWriter.ReadResponse());
+				if (!responseStatus.Equals("OK")) {
+					throw new InvalidOperationException("Error on executing command.");
+				}
+				
+				
+				//wait for the "READY" state, signaling that a line was finished
+				String commandStatus = new string(pointWriter.ReadResponse());
+				if (!commandStatus.Equals("RD")) {
+					throw new InvalidOperationException("Error on executing command.");
 				}
 			}
 		}
 		
 		
-		public void WritePoints(IList<Point> points)
+		public void WriteLine(IList<Point> points)
 		{
-			if(!listening) {
+			if (!listening) {
 				throw new InvalidOperationException("Writer needs to be open fisrt!");
 			}
 			
@@ -85,6 +99,11 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 			}
 		}
 
+		public char[] ReadResponse()
+		{
+			throw new NotImplementedException();
+		}
+		
 		public bool CanWrite()
 		{
 			return true;

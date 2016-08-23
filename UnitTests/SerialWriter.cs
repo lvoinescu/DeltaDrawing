@@ -43,7 +43,7 @@ namespace UnitTests
 			points.Add(new Point(200, 300));
 			
 			
-			serialWriter.WritePoints(points);
+			serialWriter.WriteLine(points);
 			
 			serialWriter.Close();
 		}

@@ -30,7 +30,9 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 	{
 		void Open();
 		
-		void WritePoints(IList<Point> points);
+		void WriteLine(IList<Point> points);
+		
+		char[] ReadResponse();
 		
 		void Close();
 	}

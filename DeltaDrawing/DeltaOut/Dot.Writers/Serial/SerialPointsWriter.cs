@@ -30,9 +30,12 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 	/// </summary>
 	public class SerialPointsWriter : IDeltaPointsWriter
 	{
+		byte[] READY_CMD = System.Text.Encoding.ASCII.GetBytes("RD");
 		byte[] START_LINE = System.Text.Encoding.ASCII.GetBytes("SL");
 		byte[] END_LINE = System.Text.Encoding.ASCII.GetBytes("EL");
 		readonly SerialPort serialPort;
+		volatile bool active;
+		Object syncLock = new Object();
 		
 		public SerialPointsWriter(SerialPort serialPort)
 		{
@@ -45,12 +48,13 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 		{
 			if (!serialPort.IsOpen) {
 				serialPort.Open();
-				Thread readThread = new Thread (new ThreadStart (ReadThread));
+				active = true;
+				Thread readThread = new Thread(new ThreadStart(ReadThread));
 				readThread.Start();
 			}
 		}
 
-		public void WritePoints(IList<Point> points)
+		public void WriteLine(IList<Point> points)
 		{
 			serialPort.Write(System.Text.Encoding.ASCII.GetString(START_LINE, 0, 2));
 			serialPort.Write(System.Text.Encoding.ASCII.GetString(BitConverter.GetBytes((ushort)points.Count)));
@@ -60,24 +64,41 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 			serialPort.WriteLine(System.Text.Encoding.ASCII.GetString(END_LINE, 0, 2));
 		}
 
+		public char[] ReadResponse()
+		{
+			
+			while (serialPort.BytesToRead < 1) {
+				Thread.Sleep(100);
+			}
+				
+			char[] buffer = new char[2];
+			if (serialPort.BytesToRead > 0) {
+				serialPort.Read(buffer, 0, 2);
+			}
+			return buffer;
+			
+		}
 
 		public void Close()
 		{
+			active = false;
 			serialPort.Close();
 		}
 
 
-		private void ReadThread()
+		void ReadThread()
 		{
 
-			while(true)
-			{
+			while (active) {
 				Thread.Sleep(200);
-				if(serialPort.BytesToRead > 0)
-				{
-					byte[] buffer = new byte[10];
-					serialPort.Read (buffer, 0, 2);
-					Console.WriteLine (buffer);
+				if (serialPort.BytesToRead > 0) {
+					char[] buffer = new char[2];
+					serialPort.Read(buffer, 0, 2);
+					String cmd = new string(buffer);
+					switch (cmd) {
+						case "RD":
+							break;
+					}
 				}
 			}
 		}

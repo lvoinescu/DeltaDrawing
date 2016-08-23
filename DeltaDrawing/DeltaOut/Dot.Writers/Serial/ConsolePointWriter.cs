@@ -40,7 +40,7 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 			Console.WriteLine("Console writer opened.");
 		}
 
-		public void WritePoints(IList<Point> points)
+		public void WriteLine(IList<Point> points)
 		{
 			Console.Write(System.Text.Encoding.ASCII.GetChars(START_LINE, 0, 2));
 			Console.Write(System.Text.Encoding.ASCII.GetChars(BitConverter.GetBytes((ushort)points.Count)));
@@ -50,6 +50,10 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 			Console.WriteLine(System.Text.Encoding.ASCII.GetChars(END_LINE, 0, 2));
 		}
 
+		public char[] ReadResponse()
+		{
+			return new [] {'O', 'K'};
+		}
 		public void Close()
 		{
 			Console.WriteLine("Console writer closed.");

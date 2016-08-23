@@ -66,7 +66,7 @@ namespace DrawingApplication
 		void lineBuilder_BuildFinished(object sender, ShapeBuildArgs e)
 		{
 			if (asyncSerialWriter != null) {
-				asyncSerialWriter.WritePoints(e.Shape.Points);
+				asyncSerialWriter.WriteLine(e.Shape.Points);
 			}
 		}
 		void RedrawRequired(object sender, ShapeBuildArgs e)
@@ -229,7 +229,7 @@ namespace DrawingApplication
 		{
 			initSerialWriter();
 			foreach (var drawing in dotDrawing.Drawings) {
-				asyncSerialWriter.WritePoints(drawing.Points);
+				asyncSerialWriter.WriteLine(drawing.Points);
 			}
 		}
 	}

@@ -28,7 +28,7 @@ namespace UnitTests
 			points.Add(new Point(200, 300));
 			
 			
-			consoleWriter.WritePoints(points);
+			consoleWriter.WriteLine(points);
 			
 			consoleWriter.Close();
 		}
@@ -47,7 +47,7 @@ namespace UnitTests
 			points.Add(new Point(150, 250));
 			points.Add(new Point(200, 300));
 			
-			asyncWriter.WritePoints(points);
+			asyncWriter.WriteLine(points);
 			asyncWriter.Close();
 			
 		}
@@ -70,10 +70,10 @@ namespace UnitTests
 			line2.Add(new Point(150, 250));
 			line2.Add(new Point(200, 300));
 			
-			asyncWriter.WritePoints(line1);
-			asyncWriter.WritePoints(line2);
-			asyncWriter.WritePoints(line1);
-			asyncWriter.WritePoints(line2);
+			asyncWriter.WriteLine(line1);
+			asyncWriter.WriteLine(line2);
+			asyncWriter.WriteLine(line1);
+			asyncWriter.WriteLine(line2);
 			
 			System.Threading.Thread.Sleep(1000);
 			asyncWriter.Close();
