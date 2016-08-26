@@ -30,90 +30,80 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 	/// </summary>
 	public class SerialPointsWriter : IDeltaPointsWriter
 	{
-		byte[] READY_CMD = System.Text.Encoding.ASCII.GetBytes("RD");
-		byte[] START_LINE = System.Text.Encoding.ASCII.GetBytes("SL");
-		byte[] END_LINE = System.Text.Encoding.ASCII.GetBytes("EL");
+		byte[] START_LINE = System.Text.Encoding.ASCII.GetBytes ("S");
+		byte[] END_LINE = System.Text.Encoding.ASCII.GetBytes ("E");
 		readonly SerialPort serialPort;
 		volatile bool active;
-		Object syncLock = new Object();
-		
-		public SerialPointsWriter(SerialPort serialPort)
+
+		public SerialPointsWriter (SerialPort serialPort)
 		{
 			this.serialPort = serialPort;
-
 		}
 
-
-		public void Open()
+		public void Open ()
 		{
 			if (!serialPort.IsOpen) {
-				serialPort.Open();
+				serialPort.Open ();
 				active = true;
-				Thread readThread = new Thread(new ThreadStart(ReadThread));
-				readThread.Start();
 			}
 		}
 
-		public void WriteLine(IList<Point> points)
+		public void WriteLine (IList<Point> points)
 		{
-			serialPort.Write(System.Text.Encoding.ASCII.GetString(START_LINE, 0, 2));
-			serialPort.Write(System.Text.Encoding.ASCII.GetString(BitConverter.GetBytes((ushort)points.Count)));
+			if (!serialPort.IsOpen) {
+				Console.WriteLine ("Serial port not open!");
+
+			}
+			String start = System.Text.Encoding.ASCII.GetString (START_LINE, 0, 1);
+			Console.Write (start);
+			serialPort.Write (start);
+
+
+			byte[] count = BitConverter.GetBytes ((ushort)points.Count);
+			serialPort.Write (count, 0, 2);
+			Console.WriteLine (count [0].ToString () + count [1].ToString ());
+
+			int index = 0;
 			foreach (var point in points) {
-				serialPort.Write(System.Text.Encoding.ASCII.GetString((PointToBytes(point)), 0, 4));
+				var pointBytes = PointToBytes (point);
+				Console.WriteLine ("P[" + index++ + "](" + point.X +"," + point.Y + ") =[" +
+					pointBytes [0].ToString () + "," + pointBytes [1].ToString () + "]|[" + pointBytes [2].ToString () + "," + pointBytes [3].ToString () + "]");
+				serialPort.Write (pointBytes, 0, 4);
 			} 
-			serialPort.WriteLine(System.Text.Encoding.ASCII.GetString(END_LINE, 0, 2));
+			serialPort.Write (System.Text.Encoding.ASCII.GetString (END_LINE, 0, 1));
 		}
 
-		public char[] ReadResponse()
+		public char[] ReadResponse ()
 		{
-			
-			while (serialPort.BytesToRead < 1) {
-				Thread.Sleep(100);
+			char[] buffer = new char[2];			
+			while (active && serialPort.BytesToRead < 1) {
+				Thread.Sleep (100);
 			}
-				
-			char[] buffer = new char[2];
-			if (serialPort.BytesToRead > 0) {
-				serialPort.Read(buffer, 0, 2);
-			}
-			return buffer;
-			
-		}
 
-		public void Close()
-		{
-			active = false;
-			serialPort.Close();
-		}
-
-
-		void ReadThread()
-		{
-
-			while (active) {
-				Thread.Sleep(200);
+			if (active) {
 				if (serialPort.BytesToRead > 0) {
-					char[] buffer = new char[2];
-					serialPort.Read(buffer, 0, 2);
-					String cmd = new string(buffer);
-					switch (cmd) {
-						case "RD":
-							break;
-					}
+					serialPort.Read (buffer, 0, 2);
 				}
 			}
+			return buffer;
 		}
-		
-		private static byte[] PointToBytes(Point point)
+
+		public void Close ()
+		{
+			active = false;
+			serialPort.Close ();
+		}
+
+		private static byte[] PointToBytes (Point point)
 		{
 			byte[] output = new byte[4];
-			byte[] xBytes = BitConverter.GetBytes((ushort)point.X);
-			byte[] yBytes = BitConverter.GetBytes((ushort)point.Y);
+			byte[] xBytes = BitConverter.GetBytes ((short)point.X);
+			byte[] yBytes = BitConverter.GetBytes ((short)point.Y);
 			
-			xBytes.CopyTo(output, 0);
-			yBytes.CopyTo(output, 2);
+			xBytes.CopyTo (output, 0);
+			yBytes.CopyTo (output, 2);
 			
 			return output;
 		}
-		
 	}
 }

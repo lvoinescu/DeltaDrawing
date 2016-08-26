@@ -23,6 +23,8 @@ using System.Windows.Forms;
 using DeltaDrawing.DeltaOut.Dot.Writers;
 using DeltaDrawing.DeltaOut.Dot.Writers.Serial;
 using DeltaDrawing.DotDrawing.ShapeBuilding;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace DrawingApplication
 {
@@ -35,9 +37,9 @@ namespace DrawingApplication
 		const int WM_KEYUP = 0x101;
 		const int WM_SYSKEYDOWN = 0x104;
 			
-		AbstractBuilder lineBuilder = new LineBuilder();
-		AbstractBuilder circleBuilder = new CircleBuilder();
-		AbstractBuilder freeBuilder = new FreeBuilder();
+		AbstractBuilder lineBuilder = new LineBuilder ();
+		AbstractBuilder circleBuilder = new CircleBuilder ();
+		AbstractBuilder freeBuilder = new FreeBuilder ();
 		AbstractBuilder activeBuilder;
 		
 		
@@ -45,14 +47,14 @@ namespace DrawingApplication
 		bool snapToGrid = false;
 		
 		IDeltaPointsWriter asyncSerialWriter;
-		public MainForm()
+
+		public MainForm ()
 		{
- 
-			InitializeComponent();
+ 			InitializeComponent ();
 			
-			lineBuilder.Attach(this.dotDrawing);
-			circleBuilder.Attach(this.dotDrawing);
-			freeBuilder.Attach(this.dotDrawing);
+			lineBuilder.Attach (this.dotDrawing);
+			circleBuilder.Attach (this.dotDrawing);
+			freeBuilder.Attach (this.dotDrawing);
 			
 			
 			lineBuilder.BuildFinished += lineBuilder_BuildFinished;
@@ -63,73 +65,35 @@ namespace DrawingApplication
 			
 		}
 
-		void lineBuilder_BuildFinished(object sender, ShapeBuildArgs e)
+		void ToolStripAppCloseButton (object sender, System.EventArgs e)
 		{
-			if (asyncSerialWriter != null) {
-				asyncSerialWriter.WriteLine(e.Shape.Points);
-			}
-		}
-		void RedrawRequired(object sender, ShapeBuildArgs e)
-		{
-			 
+			Application.Exit ();
 		}
 
-		//		public bool PreFilterMessage(ref Message m)
-		//		{
-		//			if (m.Msg == WM_KEYUP) {
-		//				Debug.WriteLine("Filter -> KeyUp LastKeyPressed=" + lastKeyPressed.ToString());
-		//			}
-		//			return false;
-		//		}
-		
-		
-		//		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-		//		{
-		//
-		//
-		//			if ((msg.Msg == WM_KEYDOWN) || (msg.Msg == WM_SYSKEYDOWN)) {
-		//				switch (keyData) {
-		//
-		//					case Keys.Escape:
-		//						break;
-		//					case Keys.Down:
-		//						this.Parent.Text = "Down Arrow Captured";
-		//						break;
-		//
-		//					case Keys.Up:
-		//						this.Parent.Text = "Up Arrow Captured";
-		//						break;
-		//
-		//					case Keys.Tab:
-		//						this.Parent.Text = "Tab Key Captured";
-		//						break;
-		//
-		//					case Keys.Control | Keys.M:
-		//						this.Parent.Text = "<CTRL> + M Captured";
-		//						break;
-		//
-		//					case Keys.Alt | Keys.Z:
-		//						this.Parent.Text = "<ALT> + Z Captured";
-		//						break;
-		//					case Keys.G:
-		//						snapToGrid = true;
-		//						snapToGridButton.Checked = snapToGrid;
-		//						break;
-		//				}
-		//			}
-		//
-		//			if (msg.Msg == WM_KEYUP) {
-		//				switch (keyData) {
-		//					case Keys.G:
-		//						snapToGrid = false;
-		//						snapToGridButton.Checked = snapToGrid;
-		//						break;
-		//				}
-		//			}
-		//			return base.ProcessCmdKey(ref msg, keyData);
-		//		}
-		
-		void ToolStripButton1Click(object sender, EventArgs e)
+
+		void lineBuilder_BuildFinished (object sender, ShapeBuildArgs e)
+		{
+			if (asyncSerialWriter != null) {
+				asyncSerialWriter.WriteLine (ScaleTransform (e.Shape.Points));
+			}
+		}
+
+		List<Point> ScaleTransform (List<Point> points)
+		{
+			int maxX = int.Parse (toolStripMaxX.Text);
+			int maxY = int.Parse (toolStripMaxY.Text);
+
+			List<Point> scaledPoints = new List<Point> ();
+			for (int i = 0; i < points.Count; i++) {
+				scaledPoints.Add (new Point (
+					(int)((double)maxX * ((double)points [i].X / this.dotDrawing.Width)) - maxX / 2,
+					(int)((double)maxY * ((double)points [i].Y / this.dotDrawing.Height) - maxY / 2)
+				));
+			}
+			return scaledPoints;
+		}
+
+		void ToolStripButton1Click (object sender, EventArgs e)
 		{
 			activeBuilder = lineBuilder;
 			freeBuilder.Active = false;
@@ -138,10 +102,10 @@ namespace DrawingApplication
 			toolStripButton2.Checked = false;
 			toolStripButton3.Checked = false;
 			
-			lineBuilder.Begin();
+			lineBuilder.Begin ();
 		}
-		
-		void ToolStripButton2Click(object sender, EventArgs e)
+
+		void ToolStripButton2Click (object sender, EventArgs e)
 		{
 			activeBuilder = circleBuilder;
 			freeBuilder.Active = false;
@@ -150,46 +114,46 @@ namespace DrawingApplication
 			toolStripButton1.Checked = false;
 			toolStripButton3.Checked = false;
 			
-			circleBuilder.Begin();
+			circleBuilder.Begin ();
 		}
-		
-		void ToolStripButton3Click(object sender, EventArgs e)
+
+		void ToolStripButton3Click (object sender, EventArgs e)
 		{
 			activeBuilder = freeBuilder;
 			lineBuilder.Active = false;
 			circleBuilder.Active = false;
 			if (toolStripButton3.Checked) {
-				freeBuilder.Begin();
+				freeBuilder.Begin ();
 				toolStripButton1.Checked = false;
 				toolStripButton2.Checked = false;
 			} else {
 				freeBuilder.Active = false;
 			}
 		}
-		
-		void ToolStripButton4Click(object sender, EventArgs e)
+
+		void ToolStripButton4Click (object sender, EventArgs e)
 		{
 			snapToGrid = snapToGridButton.Checked;
 			if (activeBuilder != null) {
 				activeBuilder.SnapToGrid = snapToGrid;
 			}
 		}
-		
-		void DotDrawingKeyDown(object sender, KeyEventArgs e)
+
+		void DotDrawingKeyDown (object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.G) {
-				updateSnap(true);
+				updateSnap (true);
 			}
 		}
-		
-		void DotDrawingKeyUp(object sender, KeyEventArgs e)
+
+		void DotDrawingKeyUp (object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.G) {
-				updateSnap(false);
+				updateSnap (false);
 			}
 		}
-		
-		void updateSnap(bool snap)
+
+		void updateSnap (bool snap)
 		{
 			snapToGrid = snap;
 			snapToGridButton.Checked = snap;
@@ -197,39 +161,42 @@ namespace DrawingApplication
 				activeBuilder.SnapToGrid = snap;
 			}
 		}
+
 		
-		
-		void openSerialWriter(object sender, EventArgs e)
+		void openSerialWriter (object sender, EventArgs e)
 		{
-			initSerialWriter();
+			initSerialWriter ();
 		}
-		
-		void initSerialWriter()
+
+		void initSerialWriter ()
 		{
 			if (asyncSerialWriter == null) {
 				
-				SerialPort serialPort = new SerialPort(serialPortSelector.Text, 
-					                        int.Parse(baudRateSelector.Text));
-				asyncSerialWriter = new AsyncDeltaPointsWriter(new SerialPointsWriter(serialPort));
+				SerialPort serialPort = new SerialPort (serialPortSelector.Text, 
+					                        int.Parse (baudRateSelector.Text));
+				serialPort.RtsEnable = true;
+				serialPort.DtrEnable = true;
+				serialPort.Handshake = Handshake.None;
+				asyncSerialWriter = new AsyncDeltaPointsWriter (new SerialPointsWriter (serialPort));
 			} else {
-				asyncSerialWriter.Close();
+				asyncSerialWriter.Close ();
 			}
 			
-			asyncSerialWriter.Open();
+			asyncSerialWriter.Open ();
 		}
-		
-		void ToolStripButton5Click(object sender, EventArgs e)
+
+		void ToolStripButton5Click (object sender, EventArgs e)
 		{
 			if (asyncSerialWriter != null) {
-				asyncSerialWriter.Close();
+				asyncSerialWriter.Close ();
 			}
 		}
-		
-		void ToolStripButton6Click(object sender, EventArgs e)
+
+		void ToolStripButton6Click (object sender, EventArgs e)
 		{
-			initSerialWriter();
+			initSerialWriter ();
 			foreach (var drawing in dotDrawing.Drawings) {
-				asyncSerialWriter.WriteLine(drawing.Points);
+				asyncSerialWriter.WriteLine (drawing.Points);
 			}
 		}
 	}

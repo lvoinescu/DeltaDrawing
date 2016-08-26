@@ -53,36 +53,36 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 		
 		void init()
 		{
+			Console.WriteLine("Begin line.");
 			pointWriter.Open();
 			
 			while (listening) {
 				IList<Point> points = null;
-				
+
 				lock (syncLock) {
-					
 					if (pointsQueue.Count > 0) {
 						pointsQueue.TryDequeue(out points);
-							
 					} else {
 						Monitor.Wait(syncLock);
+						pointsQueue.TryDequeue(out points);
 					}
 				}
+
 				if (points != null && points.Count > 0) {
 					pointWriter.WriteLine(points);
 				}
-				
-				//wait for the OK response
-				String responseStatus = new string(pointWriter.ReadResponse());
-				if (!responseStatus.Equals("OK")) {
-					throw new InvalidOperationException("Error on executing command.");
+
+				//wait for the "READY" state, signaling that a line has been successfully received.
+				var byteResponse = pointWriter.ReadResponse();
+				String commandStatus = new string(byteResponse);
+				Console.WriteLine ("Received command: " + commandStatus); 
+
+				if (commandStatus != "") {
+					if (!commandStatus.Equals ("RD")) {
+						throw new InvalidOperationException ("Error on executing command.");
+					}
 				}
-				
-				
-				//wait for the "READY" state, signaling that a line was finished
-				String commandStatus = new string(pointWriter.ReadResponse());
-				if (!commandStatus.Equals("RD")) {
-					throw new InvalidOperationException("Error on executing command.");
-				}
+				Console.WriteLine ("End line");
 			}
 		}
 		

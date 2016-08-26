@@ -41,7 +41,9 @@ namespace DrawingApplication
 		private System.Windows.Forms.ToolStripComboBox baudRateSelector;
 		private System.Windows.Forms.ToolStripButton toolStripButton5;
 		private System.Windows.Forms.ToolStripButton toolStripButton6;
-		
+		private System.Windows.Forms.ToolStripTextBox toolStripMaxX;
+		private System.Windows.Forms.ToolStripTextBox toolStripMaxY;
+		private System.Windows.Forms.ToolStripButton toolStripAppCloseButton;
 		/// <summary>
 		/// Disposes resources used by the form.
 		/// </summary>
@@ -55,7 +57,7 @@ namespace DrawingApplication
 			}
 			base.Dispose(disposing);
 		}
-		
+
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
 		/// Do not change the method contents inside the source code editor. The Forms designer might
@@ -80,6 +82,9 @@ namespace DrawingApplication
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripMaxX = new System.Windows.Forms.ToolStripTextBox ();
+			this.toolStripMaxY = new System.Windows.Forms.ToolStripTextBox ();
+			this.toolStripAppCloseButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -114,7 +119,10 @@ namespace DrawingApplication
 			this.baudRateSelector,
 			this.toolStripButton4,
 			this.toolStripButton5,
-			this.toolStripButton6});
+			this.toolStripButton6,
+			this.toolStripMaxX,
+			this.toolStripMaxY,
+			this.toolStripAppCloseButton});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(902, 25);
@@ -184,13 +192,13 @@ namespace DrawingApplication
 			// 
 			this.toolStripLabel2.Name = "toolStripLabel2";
 			this.toolStripLabel2.Size = new System.Drawing.Size(53, 22);
-			this.toolStripLabel2.Text = "COM port";
+			this.toolStripLabel2.Text = "COM";
 			// 
 			// serialPortSelector
 			// 
 			this.serialPortSelector.Name = "serialPortSelector";
 			this.serialPortSelector.Size = new System.Drawing.Size(121, 25);
-			this.serialPortSelector.Text = "COM1";
+			this.serialPortSelector.Text = "/dev/ttyUSB0";
 			// 
 			// toolStripLabel1
 			// 
@@ -205,7 +213,7 @@ namespace DrawingApplication
 			"9800",
 			"19200",
 			"38400",
-			"11520"});
+			"115200"});
 			this.baudRateSelector.Name = "baudRateSelector";
 			this.baudRateSelector.Size = new System.Drawing.Size(75, 25);
 			this.baudRateSelector.Text = "9600";
@@ -239,6 +247,26 @@ namespace DrawingApplication
 			this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton6.Text = "Draw all to serial port";
 			this.toolStripButton6.Click += new System.EventHandler(this.ToolStripButton6Click);
+
+
+
+			this.toolStripMaxX.Name = "toolStripMaxX";
+			this.toolStripMaxX.Size = new System.Drawing.Size(23, 40);
+			this.toolStripMaxX.Text = "200";
+
+			this.toolStripMaxY.Name = "toolStripMaxY";
+			this.toolStripMaxY.Size = new System.Drawing.Size(23, 40);
+			this.toolStripMaxY.Text = "200";
+
+			// 
+			// toolStripButton6
+			// 
+			this.toolStripAppCloseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripAppCloseButton.Name = "toolStripAppCloseButton";
+			this.toolStripAppCloseButton.Size = new System.Drawing.Size(150, 22);
+			this.toolStripAppCloseButton.Text = "Close application";
+			this.toolStripAppCloseButton.Click += new System.EventHandler(this.ToolStripAppCloseButton);
+
 			// 
 			// MainForm
 			// 
@@ -249,7 +277,7 @@ namespace DrawingApplication
 			this.Controls.Add(this.dotDrawing);
 			this.Name = "MainForm";
 			this.Text = "MainForm";
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.WindowState = System.Windows.Forms.FormWindowState.Normal;
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.ResumeLayout(false);
