@@ -69,6 +69,7 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers.Serial
 				Console.WriteLine ("P[" + index++ + "](" + point.X +"," + point.Y + ") =[" +
 					pointBytes [0].ToString () + "," + pointBytes [1].ToString () + "]|[" + pointBytes [2].ToString () + "," + pointBytes [3].ToString () + "]");
 				serialPort.Write (pointBytes, 0, 4);
+				Thread.Sleep (50);
 			} 
 			serialPort.Write (System.Text.Encoding.ASCII.GetString (END_LINE, 0, 1));
 		}

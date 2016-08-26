@@ -67,6 +67,7 @@ namespace DrawingApplication
 
 		void ToolStripAppCloseButton (object sender, System.EventArgs e)
 		{
+			asyncSerialWriter.Close ();
 			Application.Exit ();
 		}
 
@@ -75,6 +76,7 @@ namespace DrawingApplication
 		{
 			if (asyncSerialWriter != null) {
 				asyncSerialWriter.WriteLine (ScaleTransform (e.Shape.Points));
+				//asyncSerialWriter.WriteLine ((e.Shape.Points));
 			}
 		}
 

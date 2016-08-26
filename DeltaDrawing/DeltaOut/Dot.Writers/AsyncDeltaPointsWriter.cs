@@ -77,7 +77,7 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 				String commandStatus = new string(byteResponse);
 				Console.WriteLine ("Received command: " + commandStatus); 
 
-				if (commandStatus != "") {
+				if (commandStatus.Equals("")) {
 					if (!commandStatus.Equals ("RD")) {
 						throw new InvalidOperationException ("Error on executing command.");
 					}
@@ -112,6 +112,9 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 		public void Close()
 		{
 			listening = false;
+			lock (syncLock) {
+				Monitor.Pulse (syncLock);
+			}
 			pointWriter.Close();
 		}
 	}

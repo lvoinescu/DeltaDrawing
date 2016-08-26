@@ -150,6 +150,10 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				p.Offset(-(int)(radius * Math.Cos(radians)), (int)(radius * Math.Sin(radians)));
 				points.Add(new Point(p.X, p.Y));
 			}
+
+			if (points.Count > 0) {
+				points.Add (points [0]);
+			}
 			return points;
 		}
 			

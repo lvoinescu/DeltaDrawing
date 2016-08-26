@@ -98,7 +98,7 @@ namespace DrawingApplication
 			this.dotDrawing.GridSize = 10;
 			this.dotDrawing.Location = new System.Drawing.Point(0, 28);
 			this.dotDrawing.Name = "dotDrawing";
-			this.dotDrawing.Size = new System.Drawing.Size(902, 399);
+			this.dotDrawing.Size = new System.Drawing.Size(400, 400);
 			this.dotDrawing.TabIndex = 0;
 			this.dotDrawing.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DotDrawingKeyDown);
 			this.dotDrawing.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DotDrawingKeyUp);
