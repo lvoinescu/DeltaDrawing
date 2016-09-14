@@ -174,7 +174,7 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			
 			var rectangle = Rectangle.FromLTRB(minX, minY, maxX, maxY);
 			rectangle.Inflate(RADIUS, RADIUS);
-			if(Selected)
+			if (Selected)
 				rectangle.Inflate(2, 2);
 			return rectangle;
 		}

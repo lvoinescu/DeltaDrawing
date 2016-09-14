@@ -18,10 +18,13 @@
  *   along with SamDiagrams. If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
+using System.IO;
 using System.IO.Ports;
+using System.Reflection;
 using System.Windows.Forms;
 using DeltaDrawing.DeltaOut.Dot.Writers;
 using DeltaDrawing.DeltaOut.Dot.Writers.Serial;
+using DeltaDrawing.DotDrawing.Drawings;
 using DeltaDrawing.DotDrawing.ShapeBuilding;
 using System.Collections.Generic;
 using System.Drawing;
@@ -37,9 +40,9 @@ namespace DrawingApplication
 		const int WM_KEYUP = 0x101;
 		const int WM_SYSKEYDOWN = 0x104;
 			
-		AbstractBuilder lineBuilder = new LineBuilder ();
-		AbstractBuilder circleBuilder = new CircleBuilder ();
-		AbstractBuilder freeBuilder = new FreeBuilder ();
+		AbstractBuilder lineBuilder = new LineBuilder();
+		AbstractBuilder circleBuilder = new CircleBuilder();
+		AbstractBuilder freeBuilder = new FreeBuilder();
 		AbstractBuilder activeBuilder;
 		
 		
@@ -48,13 +51,13 @@ namespace DrawingApplication
 		
 		IDeltaPointsWriter asyncSerialWriter;
 
-		public MainForm ()
+		public MainForm()
 		{
- 			InitializeComponent ();
+			InitializeComponent();
 			
-			lineBuilder.Attach (this.dotDrawing);
-			circleBuilder.Attach (this.dotDrawing);
-			freeBuilder.Attach (this.dotDrawing);
+			lineBuilder.Attach(this.dotDrawing);
+			circleBuilder.Attach(this.dotDrawing);
+			freeBuilder.Attach(this.dotDrawing);
 			
 			
 			lineBuilder.BuildFinished += lineBuilder_BuildFinished;
@@ -65,37 +68,37 @@ namespace DrawingApplication
 			
 		}
 
-		void ToolStripAppCloseButton (object sender, System.EventArgs e)
+		void ToolStripAppCloseButton(object sender, System.EventArgs e)
 		{
-			asyncSerialWriter.Close ();
-			Application.Exit ();
+			asyncSerialWriter.Close();
+			Application.Exit();
 		}
 
 
-		void lineBuilder_BuildFinished (object sender, ShapeBuildArgs e)
+		void lineBuilder_BuildFinished(object sender, ShapeBuildArgs e)
 		{
 			if (asyncSerialWriter != null) {
-				asyncSerialWriter.WriteLine (ScaleTransform (e.Shape.Points));
+				asyncSerialWriter.WriteLine(ScaleTransform(e.Shape.Points));
 				//asyncSerialWriter.WriteLine ((e.Shape.Points));
 			}
 		}
 
-		List<Point> ScaleTransform (List<Point> points)
+		List<Point> ScaleTransform(List<Point> points)
 		{
-			int maxX = int.Parse (toolStripMaxX.Text);
-			int maxY = int.Parse (toolStripMaxY.Text);
+			int maxX = int.Parse(toolStripMaxX.Text);
+			int maxY = int.Parse(toolStripMaxY.Text);
 
-			List<Point> scaledPoints = new List<Point> ();
+			List<Point> scaledPoints = new List<Point>();
 			for (int i = 0; i < points.Count; i++) {
-				scaledPoints.Add (new Point (
-					(int)((double)maxX * ((double)points [i].X / this.dotDrawing.Width)) - maxX / 2,
-					(int)((double)maxY * ((double)points [i].Y / this.dotDrawing.Height) - maxY / 2)
+				scaledPoints.Add(new Point(
+					(int)((double)maxX * ((double)points[i].X / this.dotDrawing.Width)) - maxX / 2,
+					(int)((double)maxY * ((double)points[i].Y / this.dotDrawing.Height) - maxY / 2)
 				));
 			}
 			return scaledPoints;
 		}
 
-		void ToolStripButton1Click (object sender, EventArgs e)
+		void ToolStripButton1Click(object sender, EventArgs e)
 		{
 			activeBuilder = lineBuilder;
 			freeBuilder.Active = false;
@@ -104,10 +107,10 @@ namespace DrawingApplication
 			toolStripButton2.Checked = false;
 			toolStripButton3.Checked = false;
 			
-			lineBuilder.Begin ();
+			lineBuilder.Begin();
 		}
 
-		void ToolStripButton2Click (object sender, EventArgs e)
+		void ToolStripButton2Click(object sender, EventArgs e)
 		{
 			activeBuilder = circleBuilder;
 			freeBuilder.Active = false;
@@ -116,16 +119,16 @@ namespace DrawingApplication
 			toolStripButton1.Checked = false;
 			toolStripButton3.Checked = false;
 			
-			circleBuilder.Begin ();
+			circleBuilder.Begin();
 		}
 
-		void ToolStripButton3Click (object sender, EventArgs e)
+		void ToolStripButton3Click(object sender, EventArgs e)
 		{
 			activeBuilder = freeBuilder;
 			lineBuilder.Active = false;
 			circleBuilder.Active = false;
 			if (toolStripButton3.Checked) {
-				freeBuilder.Begin ();
+				freeBuilder.Begin();
 				toolStripButton1.Checked = false;
 				toolStripButton2.Checked = false;
 			} else {
@@ -133,7 +136,7 @@ namespace DrawingApplication
 			}
 		}
 
-		void ToolStripButton4Click (object sender, EventArgs e)
+		void ToolStripButton4Click(object sender, EventArgs e)
 		{
 			snapToGrid = snapToGridButton.Checked;
 			if (activeBuilder != null) {
@@ -141,21 +144,21 @@ namespace DrawingApplication
 			}
 		}
 
-		void DotDrawingKeyDown (object sender, KeyEventArgs e)
+		void DotDrawingKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.G) {
-				updateSnap (true);
+				updateSnap(true);
 			}
 		}
 
-		void DotDrawingKeyUp (object sender, KeyEventArgs e)
+		void DotDrawingKeyUp(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.G) {
-				updateSnap (false);
+				updateSnap(false);
 			}
 		}
 
-		void updateSnap (bool snap)
+		void updateSnap(bool snap)
 		{
 			snapToGrid = snap;
 			snapToGridButton.Checked = snap;
@@ -165,40 +168,111 @@ namespace DrawingApplication
 		}
 
 		
-		void openSerialWriter (object sender, EventArgs e)
+		void openSerialWriter(object sender, EventArgs e)
 		{
-			initSerialWriter ();
+			initSerialWriter();
 		}
 
-		void initSerialWriter ()
+		void initSerialWriter()
 		{
 			if (asyncSerialWriter == null) {
 				
-				SerialPort serialPort = new SerialPort (serialPortSelector.Text, 
-					                        int.Parse (baudRateSelector.Text));
+				SerialPort serialPort = new SerialPort(serialPortSelector.Text, 
+					                        int.Parse(baudRateSelector.Text));
 				serialPort.RtsEnable = true;
 				serialPort.DtrEnable = true;
 				serialPort.Handshake = Handshake.None;
-				asyncSerialWriter = new AsyncDeltaPointsWriter (new SerialPointsWriter (serialPort));
+				asyncSerialWriter = new AsyncDeltaPointsWriter(new SerialPointsWriter(serialPort));
 			} else {
-				asyncSerialWriter.Close ();
+				asyncSerialWriter.Close();
 			}
 			
-			asyncSerialWriter.Open ();
+			asyncSerialWriter.Open();
 		}
 
-		void ToolStripButton5Click (object sender, EventArgs e)
+		void ToolStripButton5Click(object sender, EventArgs e)
 		{
 			if (asyncSerialWriter != null) {
-				asyncSerialWriter.Close ();
+				asyncSerialWriter.Close();
 			}
 		}
 
-		void ToolStripButton6Click (object sender, EventArgs e)
+		void ToolStripButton6Click(object sender, EventArgs e)
 		{
-			initSerialWriter ();
+			initSerialWriter();
 			foreach (var drawing in dotDrawing.Drawings) {
-				asyncSerialWriter.WriteLine (drawing.Points);
+				asyncSerialWriter.WriteLine(drawing.Points);
+			}
+		}
+		
+		void ToolStripButton7Click(object sender, EventArgs e)
+		{
+			dotDrawing.Drawings.Clear();
+			dotDrawing.Invalidate();
+		}
+		
+		void ToolStripSeparator4Click(object sender, EventArgs e)
+		{
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.ShowDialog();
+			
+			if (!String.IsNullOrEmpty(sfd.FileName)) {
+				saveDrawing(sfd.FileName);
+			}
+		}
+
+		void saveDrawing(string fileName)
+		{
+			StreamWriter writer = new StreamWriter(fileName);
+			foreach (IDrawing drawing in dotDrawing.Drawings) {
+				saveDrawing(drawing, writer);
+				writer.WriteLine();
+			}
+			writer.Flush();
+			writer.Close();
+		}
+		
+		void saveDrawing(IDrawing drawing, StreamWriter writer)
+		{
+			for (int i = 0; i < drawing.Points.Count; i++) {
+				Point p = drawing.Points[i];
+				writer.Write(p.X + "," + p.Y);
+				if (i != drawing.Points.Count - 1) {
+					writer.Write("|");
+				}
+			}
+		}
+		void ToolStripButton8Click(object sender, EventArgs e)
+		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.ShowDialog();
+			
+			if (!String.IsNullOrEmpty(ofd.FileName)) {
+				openDrawing(ofd.FileName);
+			}
+			dotDrawing.Invalidate();
+		}
+
+		void openDrawing(String fileName)
+		{
+			StreamReader reader = new StreamReader(fileName);
+			var line = reader.ReadLine();
+			while(!String.IsNullOrEmpty(line)) {
+				PlottedShape shape = new PlottedShape();
+				shape.Points = new List<Point>();
+				
+				foreach (var stringPoint in line.Split('|')) {
+					string [] coordinates = stringPoint.Split(',');
+					Point p= new Point(int.Parse(coordinates[0]), int.Parse(coordinates[1]));
+					shape.Points.Add(p);
+				}
+				
+				List<SimpleLine> lines = new LineConnection(shape.Points).Lines();
+				shape.Components = lines;
+				shape.NeedsRedrawing = true;
+				
+				dotDrawing.AddShape(shape);
+				line = reader.ReadLine();
 			}
 		}
 	}

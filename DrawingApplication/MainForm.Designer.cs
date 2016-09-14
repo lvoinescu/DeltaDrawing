@@ -44,6 +44,10 @@ namespace DrawingApplication
 		private System.Windows.Forms.ToolStripTextBox toolStripMaxX;
 		private System.Windows.Forms.ToolStripTextBox toolStripMaxY;
 		private System.Windows.Forms.ToolStripButton toolStripAppCloseButton;
+		private System.Windows.Forms.ToolStripButton toolStripButton7;
+		private System.Windows.Forms.ToolStripButton toolStripSeparator4;
+		private System.Windows.Forms.ToolStripButton toolStripButton8;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		/// <summary>
 		/// Disposes resources used by the form.
 		/// </summary>
@@ -68,12 +72,16 @@ namespace DrawingApplication
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.dotDrawing = new DeltaDrawing.DotDrawing.DotDrawing();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.snapToGridButton = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
 			this.serialPortSelector = new System.Windows.Forms.ToolStripComboBox();
@@ -82,8 +90,8 @@ namespace DrawingApplication
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-			this.toolStripMaxX = new System.Windows.Forms.ToolStripTextBox ();
-			this.toolStripMaxY = new System.Windows.Forms.ToolStripTextBox ();
+			this.toolStripMaxX = new System.Windows.Forms.ToolStripTextBox();
+			this.toolStripMaxY = new System.Windows.Forms.ToolStripTextBox();
 			this.toolStripAppCloseButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -106,12 +114,16 @@ namespace DrawingApplication
 			// toolStrip1
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.toolStripButton8,
+			this.toolStripSeparator4,
+			this.toolStripSeparator5,
 			this.toolStripButton1,
 			this.toolStripButton2,
 			this.toolStripSeparator2,
 			this.toolStripButton3,
 			this.toolStripSeparator1,
 			this.snapToGridButton,
+			this.toolStripButton7,
 			this.toolStripSeparator3,
 			this.toolStripLabel2,
 			this.serialPortSelector,
@@ -128,6 +140,31 @@ namespace DrawingApplication
 			this.toolStrip1.Size = new System.Drawing.Size(902, 25);
 			this.toolStrip1.TabIndex = 1;
 			this.toolStrip1.Text = "toolStrip1";
+			// 
+			// toolStripButton8
+			// 
+			this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
+			this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton8.Name = "toolStripButton8";
+			this.toolStripButton8.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton8.Text = "Load";
+			this.toolStripButton8.Click += new System.EventHandler(this.ToolStripButton8Click);
+			// 
+			// toolStripSeparator4
+			// 
+			this.toolStripSeparator4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripSeparator4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSeparator4.Image")));
+			this.toolStripSeparator4.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripSeparator4.Name = "toolStripSeparator4";
+			this.toolStripSeparator4.Size = new System.Drawing.Size(23, 22);
+			this.toolStripSeparator4.Text = "Save";
+			this.toolStripSeparator4.Click += new System.EventHandler(this.ToolStripSeparator4Click);
+			// 
+			// toolStripSeparator5
+			// 
+			this.toolStripSeparator5.Name = "toolStripSeparator5";
+			this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolStripButton1
 			// 
@@ -183,6 +220,16 @@ namespace DrawingApplication
 			this.snapToGridButton.Text = "Snap to grid";
 			this.snapToGridButton.Click += new System.EventHandler(this.ToolStripButton4Click);
 			// 
+			// toolStripButton7
+			// 
+			this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
+			this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton7.Name = "toolStripButton7";
+			this.toolStripButton7.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton7.Text = "toolStripButton7";
+			this.toolStripButton7.Click += new System.EventHandler(this.ToolStripButton7Click);
+			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -191,7 +238,7 @@ namespace DrawingApplication
 			// toolStripLabel2
 			// 
 			this.toolStripLabel2.Name = "toolStripLabel2";
-			this.toolStripLabel2.Size = new System.Drawing.Size(53, 22);
+			this.toolStripLabel2.Size = new System.Drawing.Size(30, 22);
 			this.toolStripLabel2.Text = "COM";
 			// 
 			// serialPortSelector
@@ -247,26 +294,26 @@ namespace DrawingApplication
 			this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton6.Text = "Draw all to serial port";
 			this.toolStripButton6.Click += new System.EventHandler(this.ToolStripButton6Click);
-
-
-
-			this.toolStripMaxX.Name = "toolStripMaxX";
-			this.toolStripMaxX.Size = new System.Drawing.Size(23, 40);
-			this.toolStripMaxX.Text = "200";
-
-			this.toolStripMaxY.Name = "toolStripMaxY";
-			this.toolStripMaxY.Size = new System.Drawing.Size(23, 40);
-			this.toolStripMaxY.Text = "200";
-
 			// 
-			// toolStripButton6
+			// toolStripMaxX
+			// 
+			this.toolStripMaxX.Name = "toolStripMaxX";
+			this.toolStripMaxX.Size = new System.Drawing.Size(23, 25);
+			this.toolStripMaxX.Text = "200";
+			// 
+			// toolStripMaxY
+			// 
+			this.toolStripMaxY.Name = "toolStripMaxY";
+			this.toolStripMaxY.Size = new System.Drawing.Size(23, 25);
+			this.toolStripMaxY.Text = "200";
+			// 
+			// toolStripAppCloseButton
 			// 
 			this.toolStripAppCloseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripAppCloseButton.Name = "toolStripAppCloseButton";
-			this.toolStripAppCloseButton.Size = new System.Drawing.Size(150, 22);
+			this.toolStripAppCloseButton.Size = new System.Drawing.Size(91, 22);
 			this.toolStripAppCloseButton.Text = "Close application";
 			this.toolStripAppCloseButton.Click += new System.EventHandler(this.ToolStripAppCloseButton);
-
 			// 
 			// MainForm
 			// 
@@ -277,7 +324,6 @@ namespace DrawingApplication
 			this.Controls.Add(this.dotDrawing);
 			this.Name = "MainForm";
 			this.Text = "MainForm";
-			this.WindowState = System.Windows.Forms.FormWindowState.Normal;
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.ResumeLayout(false);
