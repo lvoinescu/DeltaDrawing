@@ -58,7 +58,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			switch (state) {
 				case State.NOT_INITIALIZED:
 					shape.Points = new List<Point>();
-					
+					dotDrawing.AddShape(shape);
 					center = e.Location;
 					if (snapToGrid) {
 						int gridSize = dotDrawing.GridSize;

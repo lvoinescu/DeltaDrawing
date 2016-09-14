@@ -41,7 +41,6 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 		{
 			Active = true;
 			shape = new PlottedShape();
-			dotDrawing.AddShape(shape);
 			return shape;
 		}
 		
@@ -56,7 +55,6 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				shape.Components.RemoveAt(shape.Components.Count - 1);
 				Region invalidatedRegion = new Region(shape.Bounds);
 				shape.NeedsRedrawing = true;
-				//dotDrawing.Invalidate(invalidatedRegion);
 			}
 			
 			Active = false;

@@ -48,6 +48,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 			Point p;
 			switch (state) {
 				case State.NOT_INITIALIZED:
+					
 					shape = new PlottedShape();
 					dotDrawing.AddShape(shape);
 					shape.Points = new List<Point>(DEFAULT_CAPACITY);
