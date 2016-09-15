@@ -78,9 +78,16 @@ namespace DrawingApplication
 
 		void lineBuilder_BuildFinished(object sender, ShapeBuildArgs e)
 		{
+			var count = dotDrawing.Drawings.Count;
+			var shapeNode = new TreeNode(count + ":" + dotDrawing.Drawings[count - 1].Points.Count);
+			foreach (Point p in e.Shape.Points) {
+				TreeNode pointNode = new TreeNode(p.X + "," + p.Y);
+				shapeNode.Nodes.Add(pointNode);
+			}
+			treeView1.Nodes.Add(shapeNode);
+			
 			if (asyncSerialWriter != null) {
 				asyncSerialWriter.WriteLine(ScaleTransform(e.Shape.Points));
-				//asyncSerialWriter.WriteLine ((e.Shape.Points));
 			}
 		}
 
@@ -209,6 +216,7 @@ namespace DrawingApplication
 		void ToolStripButton7Click(object sender, EventArgs e)
 		{
 			dotDrawing.Drawings.Clear();
+			treeView1.Nodes.Clear();
 			dotDrawing.Invalidate();
 		}
 		
@@ -264,20 +272,20 @@ namespace DrawingApplication
 					pShape.NeedsRedrawing = true;
 				}
 			}
-			dotDrawing.Invalidate ();
+			dotDrawing.Invalidate();
 		}
 
 		void openDrawing(String fileName)
 		{
 			StreamReader reader = new StreamReader(fileName);
 			var line = reader.ReadLine();
-			while(!String.IsNullOrEmpty(line)) {
+			while (!String.IsNullOrEmpty(line)) {
 				PlottedShape shape = new PlottedShape();
 				shape.Points = new List<Point>();
 				
 				foreach (var stringPoint in line.Split('|')) {
-					string [] coordinates = stringPoint.Split(',');
-					Point p= new Point(int.Parse(coordinates[0]), int.Parse(coordinates[1]));
+					string[] coordinates = stringPoint.Split(',');
+					Point p = new Point(int.Parse(coordinates[0]), int.Parse(coordinates[1]));
 					shape.Points.Add(p);
 				}
 				

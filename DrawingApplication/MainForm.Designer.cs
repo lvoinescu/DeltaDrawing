@@ -49,6 +49,7 @@ namespace DrawingApplication
 		private System.Windows.Forms.ToolStripButton toolStripButton8;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		private System.Windows.Forms.ToolStripButton toolStripButton9;
+		private System.Windows.Forms.TreeView treeView1;
 		/// <summary>
 		/// Disposes resources used by the form.
 		/// </summary>
@@ -95,6 +96,7 @@ namespace DrawingApplication
 			this.toolStripMaxX = new System.Windows.Forms.ToolStripTextBox();
 			this.toolStripMaxY = new System.Windows.Forms.ToolStripTextBox();
 			this.toolStripAppCloseButton = new System.Windows.Forms.ToolStripButton();
+			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -328,11 +330,22 @@ namespace DrawingApplication
 			this.toolStripAppCloseButton.Text = "Close application";
 			this.toolStripAppCloseButton.Click += new System.EventHandler(this.ToolStripAppCloseButton);
 			// 
+			// treeView1
+			// 
+			this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.treeView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.treeView1.Location = new System.Drawing.Point(436, 39);
+			this.treeView1.Name = "treeView1";
+			this.treeView1.Size = new System.Drawing.Size(454, 388);
+			this.treeView1.TabIndex = 2;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(902, 439);
+			this.Controls.Add(this.treeView1);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.dotDrawing);
 			this.Name = "MainForm";
