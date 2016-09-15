@@ -32,6 +32,7 @@ namespace DeltaDrawing.DotDrawing.Drawings
 		
 		IDrawing parent;
 
+
 		Rectangle bounds;
 		List<SimpleLine> simpleLines;
 		
@@ -44,6 +45,11 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			get {
 				return parent;
 			}
+		}
+
+		public bool DrawCircles {
+			get;
+			set;
 		}
 
 		public bool NeedsRedrawing {
@@ -94,11 +100,13 @@ namespace DeltaDrawing.DotDrawing.Drawings
 			foreach (SimpleLine line in Components) {
 				line.Draw(graphics);
 			}
-			
-			foreach (Point p in Points) {
-				Point center = new Point(p.X, p.Y);
-				center.Offset(-RADIUS / 2, -RADIUS / 2);
-				graphics.DrawEllipse(Pens.Blue, new RectangleF(center, new Size(RADIUS, RADIUS)));
+
+			if (DrawCircles) {
+				foreach (Point p in Points) {
+					Point center = new Point (p.X, p.Y);
+					center.Offset (-RADIUS / 2, -RADIUS / 2);
+					graphics.DrawEllipse (Pens.Blue, new RectangleF (center, new Size (RADIUS, RADIUS)));
+				}
 			}
 			
 			if (Selected) {
@@ -107,8 +115,6 @@ namespace DeltaDrawing.DotDrawing.Drawings
 				graphics.DrawRectangle(new Pen(Color.Red, 1), r);
 				DrawCenter(graphics);
 			}
-			
-			//NeedsRedrawing = false;
 		}
 		
 		protected void DrawCenter(Graphics graphics)

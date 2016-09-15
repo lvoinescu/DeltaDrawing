@@ -48,6 +48,7 @@ namespace DrawingApplication
 		
 		
 		bool snapToGrid = false;
+		bool drawCircles = false;
 		
 		IDeltaPointsWriter asyncSerialWriter;
 
@@ -251,6 +252,19 @@ namespace DrawingApplication
 				openDrawing(ofd.FileName);
 			}
 			dotDrawing.Invalidate();
+		}
+
+		void ToolStripButton9Click(object sender, EventArgs e)
+		{
+			drawCircles = !drawCircles;
+			foreach (IDrawing drawing in dotDrawing.Drawings) {
+				if (drawing is PlottedShape) {
+					PlottedShape pShape = drawing as PlottedShape;
+					pShape.DrawCircles = drawCircles;
+					pShape.NeedsRedrawing = true;
+				}
+			}
+			dotDrawing.Invalidate ();
 		}
 
 		void openDrawing(String fileName)

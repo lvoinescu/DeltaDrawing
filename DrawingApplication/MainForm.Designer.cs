@@ -48,6 +48,7 @@ namespace DrawingApplication
 		private System.Windows.Forms.ToolStripButton toolStripSeparator4;
 		private System.Windows.Forms.ToolStripButton toolStripButton8;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+		private System.Windows.Forms.ToolStripButton toolStripButton9;
 		/// <summary>
 		/// Disposes resources used by the form.
 		/// </summary>
@@ -73,6 +74,7 @@ namespace DrawingApplication
 			this.dotDrawing = new DeltaDrawing.DotDrawing.DotDrawing();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton9 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
@@ -123,6 +125,7 @@ namespace DrawingApplication
 			this.toolStripButton3,
 			this.toolStripSeparator1,
 			this.snapToGridButton,
+			this.toolStripButton9,
 			this.toolStripButton7,
 			this.toolStripSeparator3,
 			this.toolStripLabel2,
@@ -314,6 +317,18 @@ namespace DrawingApplication
 			this.toolStripAppCloseButton.Size = new System.Drawing.Size(91, 22);
 			this.toolStripAppCloseButton.Text = "Close application";
 			this.toolStripAppCloseButton.Click += new System.EventHandler(this.ToolStripAppCloseButton);
+
+			// 
+			// toolStripButton8
+			// 
+			this.toolStripButton9.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton9.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
+			this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton9.Name = "toolStripButton9";
+			this.toolStripButton9.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton9.Text = "Disable points";
+			this.toolStripButton9.Click += new System.EventHandler(this.ToolStripButton9Click);
+
 			// 
 			// MainForm
 			// 
