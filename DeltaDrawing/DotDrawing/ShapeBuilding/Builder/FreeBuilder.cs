@@ -29,6 +29,7 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 	public class FreeBuilder : AbstractBuilder
 	{
 		const int DEFAULT_CAPACITY = 100;
+		const int MIN_POINTS_DISTANCE = 10;
 		bool paint;
 		
 
@@ -109,6 +110,11 @@ namespace DeltaDrawing.DotDrawing.ShapeBuilding
 				
 			if (shape.Points.Count > 1) {
 				Point lastPoint = shape.Points[shape.Points.Count - 1];
+
+				if (Geometry.Geometry.Distance (lastPoint, newPoint) < MIN_POINTS_DISTANCE) {
+					return;
+				}
+
 				var simpleLine = new SimpleLine(lastPoint, newPoint);
 				simpleLine.Parent = shape;
 				shape.Components.Add(simpleLine);
