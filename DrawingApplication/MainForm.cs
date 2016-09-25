@@ -209,7 +209,9 @@ namespace DrawingApplication
 		{
 			initSerialWriter();
 			foreach (var drawing in dotDrawing.Drawings) {
-				asyncSerialWriter.WriteLine(drawing.Points);
+				if (drawing is PlottedShape) {
+					asyncSerialWriter.WriteLine(drawing.Points);
+				}
 			}
 		}
 		
