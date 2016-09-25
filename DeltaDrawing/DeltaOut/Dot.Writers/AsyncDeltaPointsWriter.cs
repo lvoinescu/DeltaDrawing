@@ -46,6 +46,7 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 		public void Open()
 		{
 			listening = true;
+			pointWriter.Open();
 			writingThread = new Thread(new ThreadStart(init));
 			writingThread.Start();
 		}
@@ -53,9 +54,6 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 		
 		void init()
 		{
-			Console.WriteLine("Begin line.");
-			pointWriter.Open();
-			
 			while (listening) {
 				IList<Point> points = null;
 
@@ -69,20 +67,21 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 				}
 
 				if (points != null && points.Count > 0) {
+					Console.WriteLine("Begin line.");
 					pointWriter.WriteLine(points);
 				}
 
 				//wait for the "READY" state, signaling that a line has been successfully received.
 				var byteResponse = pointWriter.ReadResponse();
 				String commandStatus = new string(byteResponse);
-				Console.WriteLine ("Received command: " + commandStatus); 
+				Console.WriteLine("Received command: " + commandStatus); 
 
 				if (commandStatus.Equals("")) {
-					if (!commandStatus.Equals ("RD")) {
-						throw new InvalidOperationException ("Error on executing command.");
+					if (!commandStatus.Equals("RD")) {
+						throw new InvalidOperationException("Error on executing command.");
 					}
 				}
-				Console.WriteLine ("End line");
+				Console.WriteLine("End line");
 			}
 		}
 		
@@ -113,7 +112,7 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 		{
 			listening = false;
 			lock (syncLock) {
-				Monitor.Pulse (syncLock);
+				Monitor.Pulse(syncLock);
 			}
 			pointWriter.Close();
 		}
