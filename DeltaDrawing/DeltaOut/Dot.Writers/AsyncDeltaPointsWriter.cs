@@ -47,6 +47,7 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 		{
 			listening = true;
 			pointWriter.Open();
+			Thread.Sleep (1000);
 			writingThread = new Thread(new ThreadStart(init));
 			writingThread.Start();
 		}
@@ -55,6 +56,7 @@ namespace DeltaDrawing.DeltaOut.Dot.Writers
 		void init()
 		{
 			while (listening) {
+				Console.WriteLine ("Begin line!");
 				IList<Point> points = null;
 
 				lock (syncLock) {
